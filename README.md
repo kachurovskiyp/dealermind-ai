@@ -1,57 +1,48 @@
 # DealerMind AI
 
-Scalable decision-support platform for automotive dealers operating across multiple markets.
+Scalable decision-intelligence platform for automotive dealers operating across multiple markets.
 
-## MVP scope
+## Product direction
 
-- Multi-market data model (Poland first, Ukraine-ready)
-- Vehicle and marketplace offer storage
+DealerMind AI separates three questions:
+
+- **Market Score:** Is the vehicle attractive for a selected sales market?
+- **Dealer Score:** Is it attractive for this dealer's capabilities and economics?
+- **Opportunity Score:** Is this specific offer worth acting on now?
+
+The system preserves the facts, assumptions, factor contributions and configuration version behind every recommendation.
+
+## Current foundation
+
+- Multi-market data model, Poland first and Ukraine-ready
+- Vehicle and marketplace-offer separation
 - Price-history tracking
-- Rule-based opportunity scoring
+- Explainable configurable scoring primitives
 - FastAPI REST API
-- PostgreSQL + Alembic
+- PostgreSQL and Alembic
 - Docker Compose local environment
 - Automated tests and GitHub Actions CI
 
 ## Quick start
 
-1. Copy environment variables:
-
 ```bash
 cp .env.example .env
-```
-
-2. Start services:
-
-```bash
 docker compose up --build
 ```
 
-3. Open API documentation:
+Open:
 
-- http://localhost:8000/docs
-- http://localhost:8000/health
+- API documentation: http://localhost:8000/docs
+- Health endpoint: http://localhost:8000/health
 
-4. Run tests:
+Run tests:
 
 ```bash
 docker compose run --rm api pytest
 ```
 
-## Initial API
+## Project doctrine
 
-- `GET /health`
-- `GET /api/v1/markets`
-- `POST /api/v1/markets`
-- `GET /api/v1/offers`
-- `POST /api/v1/offers`
+Start with [docs/DEVELOPER_BIBLE.md](docs/DEVELOPER_BIBLE.md).
 
-## Architecture principles
-
-1. Markets are first-class entities.
-2. A vehicle and an offer are separate concepts.
-3. Raw source data is preserved for traceability.
-4. AI explains recommendations; deterministic services calculate prices, costs, and scores.
-5. Marketplace integrations are adapters, not core-domain dependencies.
-
-See [docs/ROADMAP.md](docs/ROADMAP.md) and [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md).
+Architecture decisions are stored in [docs/adr](docs/adr), and the prioritized work is in [docs/product/BACKLOG.md](docs/product/BACKLOG.md).

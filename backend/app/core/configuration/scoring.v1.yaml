@@ -1,0 +1,27 @@
+version: scoring-v1-draft
+status: draft
+scores:
+  market:
+    liquidity: 25
+    demand: 20
+    price_position: 20
+    reliability: 15
+    competition: 10
+    seasonality: 10
+  dealer:
+    predicted_net_profit: 20
+    roi: 15
+    preparation_duration: 15
+    preparation_complexity: 10
+    internal_capability_fit: 10
+    external_service_dependency: 10
+    capital_turnover: 10
+    repair_risk: 10
+  opportunity:
+    discount_to_market: 25
+    listing_freshness: 20
+    seller_quality: 10
+    distance_and_logistics: 10
+    data_completeness: 10
+    negotiation_potential: 15
+    urgency: 10
