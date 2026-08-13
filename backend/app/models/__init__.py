@@ -1,3 +1,31 @@
-from app.models.domain import Market, Marketplace, Offer, PriceObservation, Vehicle
+from app.models.domain import (
+    Acquisition,
+    InventoryItem,
+    Market,
+    Marketplace,
+    Offer,
+    Opportunity,
+    OpportunityDecision,
+    Preparation,
+    PriceObservation,
+    Sale,
+    ScoreSnapshot,
+    Vehicle,
+    VehicleEvent,
+)
 
-__all__ = ["Market", "Marketplace", "Offer", "PriceObservation", "Vehicle"]
+__all__ = [
+    "Acquisition",
+    "InventoryItem",
+    "Market",
+    "Marketplace",
+    "Offer",
+    "Opportunity",
+    "OpportunityDecision",
+    "Preparation",
+    "PriceObservation",
+    "Sale",
+    "ScoreSnapshot",
+    "Vehicle",
+    "VehicleEvent",
+]

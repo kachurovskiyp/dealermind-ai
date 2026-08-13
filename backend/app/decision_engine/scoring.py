@@ -1,9 +1,9 @@
 """Deterministic and explainable weighted scoring primitives."""
 
+from collections.abc import Mapping
 from dataclasses import dataclass
 from enum import StrEnum
 from math import isfinite
-from typing import Mapping
 
 
 class ScoreType(StrEnum):
