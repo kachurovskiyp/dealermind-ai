@@ -1,0 +1,31 @@
+from app.models.domain import (
+    Acquisition,
+    InventoryItem,
+    Market,
+    Marketplace,
+    Offer,
+    Opportunity,
+    OpportunityDecision,
+    Preparation,
+    PriceObservation,
+    Sale,
+    ScoreSnapshot,
+    Vehicle,
+    VehicleEvent,
+)
+
+__all__ = [
+    "Acquisition",
+    "InventoryItem",
+    "Market",
+    "Marketplace",
+    "Offer",
+    "Opportunity",
+    "OpportunityDecision",
+    "Preparation",
+    "PriceObservation",
+    "Sale",
+    "ScoreSnapshot",
+    "Vehicle",
+    "VehicleEvent",
+]

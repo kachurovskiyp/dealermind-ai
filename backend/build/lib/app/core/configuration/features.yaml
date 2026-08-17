@@ -1,0 +1,9 @@
+version: features-v1
+features:
+  market_score: true
+  dealer_score: true
+  opportunity_score: true
+  preparation_intelligence: false
+  poland_market: true
+  ukraine_market: false
+  ai_copilot: false

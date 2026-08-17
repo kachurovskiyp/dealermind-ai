@@ -1,0 +1,78 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="theme-color" content="#101914">
+  <title>DealerMind — лента возможностей</title>
+  <link rel="stylesheet" href="/assets/styles.css">
+  <link rel="stylesheet" href="/assets/ranking.css">
+</head>
+<body>
+  <header class="topbar">
+    <a class="brand" href="/" aria-label="DealerMind, главная">
+      <span class="brand-mark">DM</span><span>DealerMind</span>
+    </a>
+    <nav><a href="#feed">Возможности</a><a href="/docs">API</a></nav>
+    <button class="primary" data-open="listing">+ Новое объявление</button>
+  </header>
+
+  <main>
+    <section class="hero">
+      <div>
+        <p class="eyebrow">Decision intelligence</p>
+        <h1>Лучшие сделки.<br><em>До того, как их заметят другие.</em></h1>
+        <p class="lede">Единая лента для анализа рынка, вашей экономики и решений по каждой машине.</p>
+      </div>
+      <div class="pulse"><span>Система</span><strong id="system-state">Подключение…</strong></div>
+    </section>
+
+    <section class="metrics" aria-label="Сводка">
+      <article><span>Возможностей</span><strong id="metric-total">—</strong></article>
+      <article><span>На оценке</span><strong id="metric-review">—</strong></article>
+      <article><span>Принято</span><strong id="metric-accepted">—</strong></article>
+      <article><span>Ожидаемая прибыль</span><strong id="metric-profit">—</strong></article>
+    </section>
+
+    <section id="setup" class="setup hidden">
+      <div><p class="eyebrow">Первый запуск</p><h2>Подготовим рабочее пространство</h2><p>Создадим рынки Польши и Украины и первую площадку. Это займёт несколько секунд.</p></div>
+      <button class="primary" id="setup-button">Настроить DealerMind</button>
+    </section>
+
+    <section id="feed" class="feed-section">
+      <div class="section-head">
+        <div><p class="eyebrow">Opportunity feed</p><h2>Лента возможностей</h2></div>
+        <div class="filters" role="group" aria-label="Фильтр статуса">
+          <button class="filter active" data-filter="all">Все</button>
+          <button class="filter" data-filter="evaluating">На оценке</button>
+          <button class="filter" data-filter="accepted">Принятые</button>
+        </div>
+      </div>
+      <div id="feed-list" class="feed-list"><div class="empty">Загружаем данные…</div></div>
+    </section>
+  </main>
+
+  <dialog id="listing-dialog">
+    <form id="listing-form" method="dialog">
+      <div class="dialog-head"><div><p class="eyebrow">Новая возможность</p><h2>Добавить объявление</h2></div><button type="button" class="icon-button" data-close aria-label="Закрыть">×</button></div>
+      <div class="form-grid">
+        <label class="wide">Площадка<select name="marketplace_id" required></select></label>
+        <label>Марка<input name="make" placeholder="Volkswagen" required></label>
+        <label>Модель<input name="model" placeholder="Passat" required></label>
+        <label>Год<input name="year" type="number" min="1886" max="2100" placeholder="2019"></label>
+        <label>Пробег, км<input name="mileage_km" type="number" min="0" placeholder="145000"></label>
+        <label class="wide">Ссылка<input name="url" type="url" placeholder="https://…" required></label>
+        <label>Цена объявления<input name="price" type="number" min="1" step="0.01" required></label>
+        <label>Валюта<select name="currency"><option>PLN</option><option>EUR</option><option>UAH</option></select></label>
+        <label>Ожидаемая цена продажи<input name="sale_price" type="number" min="0" step="0.01"></label>
+        <label>Ожидаемые расходы<input name="costs" type="number" min="0" step="0.01" value="0"></label>
+      </div>
+      <p id="form-error" class="error" role="alert"></p>
+      <div class="dialog-actions"><button type="button" data-close class="secondary">Отмена</button><button type="submit" class="primary">Создать возможность</button></div>
+    </form>
+  </dialog>
+
+  <div id="toast" role="status" aria-live="polite"></div>
+  <script src="/assets/app.js" defer></script>
+</body>
+</html>

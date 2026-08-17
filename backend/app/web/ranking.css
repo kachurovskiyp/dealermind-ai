@@ -1,0 +1,9 @@
+.opportunity.priority { border-left: 5px solid var(--lime); }
+.opportunity.review { border-left: 5px solid var(--amber); }
+.opportunity.low { opacity: .82; }
+.ranking-reason {
+  color: var(--green);
+  font-size: 11px;
+  margin-top: 8px;
+  max-width: 430px;
+}
