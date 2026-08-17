@@ -8,13 +8,14 @@
   <link rel="stylesheet" href="/assets/styles.css">
   <link rel="stylesheet" href="/assets/ranking.css">
   <link rel="stylesheet" href="/assets/import.css">
+  <link rel="stylesheet" href="/assets/automation.css">
 </head>
 <body>
   <header class="topbar">
     <a class="brand" href="/" aria-label="DealerMind, главная">
       <span class="brand-mark">DM</span><span>DealerMind</span>
     </a>
-    <nav><a href="#feed">Возможности</a><a href="/docs">API</a></nav>
+    <nav><a href="#feed">Возможности</a><a href="#sources">Источники</a><a href="/docs">API</a></nav>
     <button class="secondary" data-open="import">Импорт файла</button>
     <button class="primary" data-open="listing">+ Новое объявление</button>
   </header>
@@ -52,6 +53,16 @@
       </div>
       <div id="feed-list" class="feed-list"><div class="empty">Загружаем данные…</div></div>
     </section>
+
+    <section id="sources" class="sources-section">
+      <div class="section-head">
+        <div><p class="eyebrow">Automation</p><h2>Источники данных</h2></div>
+        <button class="primary" data-open="source">+ Добавить источник</button>
+      </div>
+      <div id="source-list" class="source-list"><div class="empty">Источники ещё не добавлены.</div></div>
+      <div class="section-head runs-head"><div><p class="eyebrow">Run history</p><h2>Последние запуски</h2></div></div>
+      <div id="run-list" class="run-list"></div>
+    </section>
   </main>
 
   <dialog id="listing-dialog">
@@ -71,6 +82,20 @@
       </div>
       <p id="form-error" class="error" role="alert"></p>
       <div class="dialog-actions"><button type="button" data-close class="secondary">Отмена</button><button type="submit" class="primary">Создать возможность</button></div>
+    </form>
+  </dialog>
+
+  <dialog id="source-dialog">
+    <form id="source-form" method="dialog">
+      <div class="dialog-head"><div><p class="eyebrow">Автоматический импорт</p><h2>Новый источник</h2></div><button type="button" class="icon-button" data-close-source aria-label="Закрыть">×</button></div>
+      <div class="form-grid">
+        <label class="wide">Название<input name="name" placeholder="Partner JSON feed" required></label>
+        <label class="wide">URL JSON-ленты<input name="endpoint_url" type="url" placeholder="https://example.com/listings.json" required></label>
+        <label>Интервал, минут<input name="interval_minutes" type="number" min="1" max="10080" value="60" required></label>
+        <label class="checkbox-label"><input name="enabled" type="checkbox" checked> Запустить автоматически</label>
+      </div>
+      <p id="source-error" class="error" role="alert"></p>
+      <div class="dialog-actions"><button type="button" data-close-source class="secondary">Отмена</button><button type="submit" class="primary">Сохранить источник</button></div>
     </form>
   </dialog>
 

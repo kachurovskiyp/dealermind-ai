@@ -1,3 +1,4 @@
+from app.models.automation import ImportRun, ImportSource
 from app.models.domain import (
     Acquisition,
     InventoryItem,
@@ -17,6 +18,8 @@ from app.models.domain import (
 __all__ = [
     "Acquisition",
     "InventoryItem",
+    "ImportRun",
+    "ImportSource",
     "Market",
     "Marketplace",
     "Offer",

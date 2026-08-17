@@ -1,0 +1,24 @@
+.sources-section { margin-top: 90px; }
+.source-list, .run-list { display: grid; gap: 10px; }
+.source-card, .run-card {
+  display: grid;
+  grid-template-columns: 1.4fr 1fr 1fr auto;
+  align-items: center;
+  gap: 18px;
+  padding: 18px 20px;
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  background: var(--card);
+}
+.source-name { font-weight: 800; }
+.source-url { color: var(--muted); font-size: 11px; margin-top: 5px; word-break: break-all; }
+.source-state { font-size: 12px; font-weight: 750; }
+.source-state.enabled, .run-status.completed { color: var(--green); }
+.source-state.disabled, .run-status.failed { color: var(--red); }
+.run-status.partial { color: var(--amber); }
+.runs-head { margin-top: 54px; }
+.runs-head h2 { font-size: 28px; }
+.run-card { grid-template-columns: 1.2fr .7fr 1.4fr .8fr; font-size: 13px; }
+.checkbox-label { display: flex; align-items: center; gap: 8px; color: var(--ink) !important; }
+.checkbox-label input { width: auto; margin: 0; }
+@media(max-width:760px){.source-card,.run-card{grid-template-columns:1fr 1fr}.source-card>div:first-child,.run-card>div:first-child{grid-column:1/-1}}

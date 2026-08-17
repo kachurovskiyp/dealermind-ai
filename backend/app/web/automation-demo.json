@@ -1,0 +1,23 @@
+[
+  {
+    "market_code": "PL",
+    "marketplace_slug": "otomoto",
+    "target_market_code": "PL",
+    "external_id": "automation-demo-001",
+    "url": "https://www.otomoto.pl/example-automation",
+    "title": "Skoda Octavia 2020 — automation demo",
+    "make": "Skoda",
+    "model": "Octavia",
+    "year": 2020,
+    "mileage_km": 118000,
+    "fuel_type": "petrol",
+    "gearbox": "automatic",
+    "location": "Warszawa",
+    "seller_type": "dealer",
+    "description": "Local DealerMind automation test feed",
+    "price": 59000,
+    "currency": "PLN",
+    "expected_sale_price": 68000,
+    "expected_costs": 2500
+  }
+]
