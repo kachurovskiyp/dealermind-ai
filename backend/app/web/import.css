@@ -1,0 +1,12 @@
+.lede.small { font-size: 14px; margin: 14px 0 22px; }
+.drop-zone {
+  display: block;
+  border: 1px dashed var(--green);
+  border-radius: 14px;
+  background: #f3f8e8;
+  padding: 24px;
+  color: var(--green);
+  font-weight: 750;
+  text-align: center;
+}
+.drop-zone input { background: #fff; }

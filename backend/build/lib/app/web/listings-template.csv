@@ -1,0 +1,2 @@
+market_code,marketplace_slug,target_market_code,external_id,url,title,make,model,vin,year,mileage_km,fuel_type,gearbox,location,seller_type,description,price,currency,expected_sale_price,expected_costs
+PL,otomoto,PL,example-001,https://www.otomoto.pl/example,Volkswagen Passat 2019,Volkswagen,Passat,,2019,145000,diesel,automatic,Warszawa,dealer,Example listing for import,52000,PLN,61000,3000

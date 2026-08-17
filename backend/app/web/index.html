@@ -7,6 +7,7 @@
   <title>DealerMind — лента возможностей</title>
   <link rel="stylesheet" href="/assets/styles.css">
   <link rel="stylesheet" href="/assets/ranking.css">
+  <link rel="stylesheet" href="/assets/import.css">
 </head>
 <body>
   <header class="topbar">
@@ -14,6 +15,7 @@
       <span class="brand-mark">DM</span><span>DealerMind</span>
     </a>
     <nav><a href="#feed">Возможности</a><a href="/docs">API</a></nav>
+    <button class="secondary" data-open="import">Импорт файла</button>
     <button class="primary" data-open="listing">+ Новое объявление</button>
   </header>
 
@@ -31,7 +33,7 @@
       <article><span>Возможностей</span><strong id="metric-total">—</strong></article>
       <article><span>На оценке</span><strong id="metric-review">—</strong></article>
       <article><span>Принято</span><strong id="metric-accepted">—</strong></article>
-      <article><span>Ожидаемая прибыль</span><strong id="metric-profit">—</strong></article>
+      <article><span>Прибыль принятых решений</span><strong id="metric-profit">—</strong></article>
     </section>
 
     <section id="setup" class="setup hidden">
@@ -69,6 +71,17 @@
       </div>
       <p id="form-error" class="error" role="alert"></p>
       <div class="dialog-actions"><button type="button" data-close class="secondary">Отмена</button><button type="submit" class="primary">Создать возможность</button></div>
+    </form>
+  </dialog>
+
+  <dialog id="import-dialog">
+    <form id="import-form" method="dialog">
+      <div class="dialog-head"><div><p class="eyebrow">Market Intelligence</p><h2>Импорт объявлений</h2></div><button type="button" class="icon-button" data-close-import aria-label="Закрыть">×</button></div>
+      <p class="lede small">Загрузите CSV или JSON. Повторный импорт обновит цену и данные, не создавая дублей.</p>
+      <label class="drop-zone">Файл CSV или JSON<input id="import-file" type="file" accept=".csv,.json,text/csv,application/json" required></label>
+      <p><a href="/assets/listings-template.csv" download>Скачать шаблон CSV</a></p>
+      <p id="import-error" class="error" role="alert"></p>
+      <div class="dialog-actions"><button type="button" data-close-import class="secondary">Отмена</button><button type="submit" class="primary">Импортировать</button></div>
     </form>
   </dialog>
 
