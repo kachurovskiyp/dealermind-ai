@@ -203,4 +203,9 @@ def import_listings(db: Session, provider: ListingProvider) -> ListingImportResu
                 ImportErrorRead(row=row_number, external_id=record.external_id, message=str(exc))
             )
     db.commit()
-    return ListingImportResult(**counters.__dict__)
+    result = ListingImportResult(**counters.__dict__)
+    if counters.offer_ids:
+        from app.services.valuation import value_opportunities_for_offers
+
+        value_opportunities_for_offers(db, counters.offer_ids)
+    return result

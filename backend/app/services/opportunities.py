@@ -58,6 +58,8 @@ def opportunity_feed(db: Session) -> list[dict[str, object]]:
         .options(
             selectinload(Opportunity.offer).selectinload(Offer.vehicle),
             selectinload(Opportunity.scores),
+            selectinload(Opportunity.valuations),
+            selectinload(Opportunity.comparable_collections),
             selectinload(Opportunity.acquisition),
         )
         .order_by(Opportunity.created_at.desc())
@@ -71,6 +73,12 @@ def opportunity_feed(db: Session) -> list[dict[str, object]]:
             latest_scores[snapshot.kind.value] = snapshot.value
             latest_by_kind[snapshot.kind.value] = snapshot
         ranking_snapshot = latest_by_kind.get(ScoreKind.OPPORTUNITY.value)
+        valuation = opportunity.valuations[-1] if opportunity.valuations else None
+        latest_collection = (
+            opportunity.comparable_collections[-1]
+            if opportunity.comparable_collections
+            else None
+        )
         reasons: list[str] = []
         if ranking_snapshot is not None:
             ranked_contributions = sorted(
@@ -106,6 +114,13 @@ def opportunity_feed(db: Session) -> list[dict[str, object]]:
                 ),
                 "acquisition_id": (
                     opportunity.acquisition.id if opportunity.acquisition is not None else None
+                ),
+                "valuation": valuation,
+                "latest_collection_status": (
+                    latest_collection.status if latest_collection is not None else None
+                ),
+                "latest_collection_usable_count": (
+                    latest_collection.usable_count if latest_collection is not None else None
                 ),
             }
         )

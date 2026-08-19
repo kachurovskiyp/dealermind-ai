@@ -1,0 +1,12 @@
+version: valuation-v1
+sale_discount: 0.04
+year_adjustment: 0.02
+mileage_adjustment_per_10000_km: 0.01
+year_tolerance: 2
+mileage_tolerance_km: 60000
+minimum_comparables: 2
+default_costs:
+  PLN: 5000
+  UAH: 40000
+  EUR: 1200
+  USD: 1200

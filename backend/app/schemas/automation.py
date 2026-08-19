@@ -1,4 +1,5 @@
 from datetime import datetime
+from typing import Literal
 from uuid import UUID
 
 from pydantic import BaseModel, ConfigDict, Field, HttpUrl
@@ -8,6 +9,7 @@ from app.models.automation import ImportRunStatus
 
 class ImportSourceCreate(BaseModel):
     name: str = Field(min_length=2, max_length=150)
+    provider_type: Literal["json_http", "otomoto_search"] = "json_http"
     endpoint_url: HttpUrl
     interval_minutes: int = Field(default=60, ge=1, le=10_080)
     enabled: bool = True

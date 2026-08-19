@@ -29,3 +29,14 @@ This vocabulary is part of the domain contract. API, code, database and product 
 - Price observations, score snapshots, opportunity decisions and vehicle events are append-only.
 - Poland and Ukraine share the domain model; market-specific rules belong to configuration or market services.
 - Historical facts are never overwritten. Later facts supersede them while preserving the decision trail.
+## Market Intelligence automation
+
+- **Watchlist** — a saved marketplace search whose public results are checked repeatedly.
+- **Import Source** — a configured external input, such as a JSON feed or an Otomoto Watchlist.
+- **Import Run** — an immutable execution record with received, created, updated, unchanged,
+  and error counters.
+- **Market Valuation** — an evidence-backed monetary estimate derived from comparable listings.
+- **Valuation Snapshot** — an immutable, versioned record of an estimate and its explanation.
+- **Comparable** — a listing selected by explicit make, model, year, mileage, market, and currency rules.
+- **Comparable Collection** — one auditable attempt to gather valuation evidence for an Opportunity.
+- **Comparable Listing** — an immutable market observation used only for valuation, never shown as an Opportunity.

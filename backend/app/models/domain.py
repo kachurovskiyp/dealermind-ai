@@ -199,6 +199,61 @@ class Opportunity(TimestampMixin, Base):
     acquisition: Mapped["Acquisition | None"] = relationship(
         back_populates="opportunity", uselist=False
     )
+    valuations: Mapped[list["ValuationSnapshot"]] = relationship(
+        back_populates="opportunity", order_by="ValuationSnapshot.calculated_at"
+    )
+    comparable_collections: Mapped[list["ComparableCollection"]] = relationship(
+        back_populates="opportunity", order_by="ComparableCollection.started_at"
+    )
+
+
+class ValuationSnapshot(Base):
+    __tablename__ = "valuation_snapshots"
+    id: Mapped[UUID] = mapped_column(PGUUID(as_uuid=True), primary_key=True, default=uuid4)
+    opportunity_id: Mapped[UUID] = mapped_column(ForeignKey("opportunities.id"), index=True)
+    market_estimate: Mapped[Decimal] = mapped_column(Numeric(14, 2))
+    conservative_sale_price: Mapped[Decimal] = mapped_column(Numeric(14, 2))
+    price_low: Mapped[Decimal] = mapped_column(Numeric(14, 2))
+    price_high: Mapped[Decimal] = mapped_column(Numeric(14, 2))
+    sample_size: Mapped[int] = mapped_column(Integer)
+    confidence: Mapped[str] = mapped_column(String(20))
+    configuration_version: Mapped[str] = mapped_column(String(100))
+    explanation: Mapped[dict[str, object]] = mapped_column(JSONB)
+    calculated_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=utcnow)
+    opportunity: Mapped[Opportunity] = relationship(back_populates="valuations")
+
+
+class ComparableCollection(Base):
+    __tablename__ = "comparable_collections"
+    id: Mapped[UUID] = mapped_column(PGUUID(as_uuid=True), primary_key=True, default=uuid4)
+    opportunity_id: Mapped[UUID] = mapped_column(ForeignKey("opportunities.id"), index=True)
+    source_url: Mapped[str] = mapped_column(String(1000))
+    status: Mapped[str] = mapped_column(String(20), default="running")
+    requested_limit: Mapped[int] = mapped_column(Integer)
+    found_count: Mapped[int] = mapped_column(Integer, default=0)
+    usable_count: Mapped[int] = mapped_column(Integer, default=0)
+    error_message: Mapped[str | None] = mapped_column(Text)
+    started_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=utcnow)
+    completed_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True))
+    opportunity: Mapped[Opportunity] = relationship(back_populates="comparable_collections")
+    listings: Mapped[list["ComparableListing"]] = relationship(back_populates="collection")
+
+
+class ComparableListing(Base):
+    __tablename__ = "comparable_listings"
+    id: Mapped[UUID] = mapped_column(PGUUID(as_uuid=True), primary_key=True, default=uuid4)
+    collection_id: Mapped[UUID] = mapped_column(ForeignKey("comparable_collections.id", ondelete="CASCADE"), index=True)
+    external_id: Mapped[str] = mapped_column(String(200), index=True)
+    url: Mapped[str] = mapped_column(String(1000))
+    title: Mapped[str] = mapped_column(String(500))
+    make: Mapped[str] = mapped_column(String(100), index=True)
+    model: Mapped[str] = mapped_column(String(100), index=True)
+    year: Mapped[int | None] = mapped_column(Integer)
+    mileage_km: Mapped[int | None] = mapped_column(Integer)
+    price: Mapped[Decimal] = mapped_column(Numeric(14, 2))
+    currency: Mapped[Currency] = mapped_column(Enum(Currency, name="comparable_currency"))
+    observed_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=utcnow)
+    collection: Mapped[ComparableCollection] = relationship(back_populates="listings")
 
 
 class ScoreSnapshot(Base):
@@ -312,6 +367,13 @@ def _reject_history_mutation(_mapper: object, _connection: object, target: objec
     raise ValueError(f"{type(target).__name__} is append-only; append a correction instead")
 
 
-for history_model in (PriceObservation, ScoreSnapshot, OpportunityDecision, VehicleEvent):
+for history_model in (
+    PriceObservation,
+    ScoreSnapshot,
+    ValuationSnapshot,
+    ComparableListing,
+    OpportunityDecision,
+    VehicleEvent,
+):
     event.listen(history_model, "before_update", _reject_history_mutation)
     event.listen(history_model, "before_delete", _reject_history_mutation)

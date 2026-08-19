@@ -5,6 +5,7 @@ from sqlalchemy.orm import Session
 
 from app.db.session import get_db
 from app.schemas.opportunity import (
+    ComparableCollectionRead,
     DecisionCreate,
     DecisionRead,
     OpportunityCreate,
@@ -12,7 +13,9 @@ from app.schemas.opportunity import (
     OpportunityRead,
     ScoreCalculate,
     ScoreSnapshotRead,
+    ValuationSnapshotRead,
 )
+from app.services.comparables import collect_comparables
 from app.services.opportunities import (
     calculate_and_store_score,
     create_opportunity,
@@ -21,6 +24,7 @@ from app.services.opportunities import (
     recalculate_opportunity,
     record_decision,
 )
+from app.services.valuation import recalculate_valuation
 
 router = APIRouter(prefix="/opportunities", tags=["opportunities"])
 
@@ -35,6 +39,23 @@ def post_opportunity_recalculation(
     opportunity_id: UUID, db: Session = Depends(get_db)
 ) -> list[ScoreSnapshotRead]:
     return recalculate_opportunity(db, opportunity_id)
+
+
+@router.post("/{opportunity_id}/valuation", response_model=ValuationSnapshotRead)
+def post_valuation_recalculation(
+    opportunity_id: UUID, db: Session = Depends(get_db)
+) -> ValuationSnapshotRead:
+    return recalculate_valuation(db, opportunity_id)
+
+
+@router.post("/{opportunity_id}/comparables", response_model=ComparableCollectionRead)
+async def post_comparable_collection(
+    opportunity_id: UUID, limit: int = 25, db: Session = Depends(get_db)
+) -> ComparableCollectionRead:
+    collection, valuation = await collect_comparables(db, opportunity_id, limit)
+    result = ComparableCollectionRead.model_validate(collection).model_dump()
+    result["valuation"] = valuation
+    return ComparableCollectionRead.model_validate(result)
 
 
 @router.get("", response_model=list[OpportunityRead])

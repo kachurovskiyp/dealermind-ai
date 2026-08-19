@@ -10,6 +10,7 @@ from sqlalchemy.orm import Session
 
 from app.db.session import SessionLocal
 from app.market_intelligence import StructuredListingProvider
+from app.market_intelligence.otomoto_watchlist import collect_otomoto_records
 from app.models.automation import ImportRun, ImportRunStatus, ImportSource
 from app.models.domain import utcnow
 from app.schemas.automation import ImportSourceCreate, ImportSourceUpdate
@@ -24,13 +25,31 @@ def list_sources(db: Session) -> list[ImportSource]:
 
 
 def create_source(db: Session, payload: ImportSourceCreate) -> ImportSource:
+    if payload.provider_type == "otomoto_search":
+        from app.market_intelligence.otomoto_watchlist import validate_otomoto_search_url
+
+        try:
+            validate_otomoto_search_url(str(payload.endpoint_url))
+        except ValueError as exc:
+            raise HTTPException(
+                status_code=status.HTTP_422_UNPROCESSABLE_ENTITY, detail=str(exc)
+            ) from exc
+        if payload.interval_minutes < 30:
+            raise HTTPException(
+                status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
+                detail="Для Otomoto минимальный интервал проверки — 30 минут",
+            )
     source = ImportSource(
         name=payload.name,
-        provider_type="json_http",
+        provider_type=payload.provider_type,
         endpoint_url=str(payload.endpoint_url),
         interval_minutes=payload.interval_minutes,
         enabled=payload.enabled,
-        next_run_at=utcnow() if payload.enabled else None,
+        next_run_at=(
+            utcnow() + timedelta(minutes=payload.interval_minutes)
+            if payload.enabled and payload.provider_type == "otomoto_search"
+            else utcnow() if payload.enabled else None
+        ),
         configuration=payload.configuration,
     )
     db.add(source)
@@ -100,10 +119,22 @@ async def execute_source(source_id: UUID, trigger: str) -> ImportRun:
         db.commit()
         db.refresh(run)
         try:
-            async with httpx.AsyncClient(timeout=30, follow_redirects=False) as client:
-                response = await client.get(source.endpoint_url)
-                response.raise_for_status()
-                batch = _batch_from_response(source, response.json())
+            collection_errors: list[str] = []
+            if source.provider_type == "otomoto_search":
+                max_results = min(int(source.configuration.get("max_results", 10)), 25)
+                records, collection_errors = await collect_otomoto_records(
+                    source.endpoint_url, max_results=max_results
+                )
+                if not records:
+                    raise ValueError(
+                        collection_errors[0] if collection_errors else "Поиск не вернул объявлений"
+                    )
+                batch = ListingImportBatch(provider=source.name, records=records)
+            else:
+                async with httpx.AsyncClient(timeout=30, follow_redirects=False) as client:
+                    response = await client.get(source.endpoint_url)
+                    response.raise_for_status()
+                    batch = _batch_from_response(source, response.json())
             result = import_listings(
                 db,
                 StructuredListingProvider(batch.records, name=source.name),
@@ -112,10 +143,11 @@ async def execute_source(source_id: UUID, trigger: str) -> ImportRun:
             run.created = result.created
             run.updated = result.updated
             run.unchanged = result.unchanged
-            run.error_count = len(result.errors)
-            run.error_message = "; ".join(error.message for error in result.errors) or None
+            messages = collection_errors + [error.message for error in result.errors]
+            run.error_count = len(messages)
+            run.error_message = "; ".join(messages)[:4000] or None
             run.status = (
-                ImportRunStatus.PARTIAL if result.errors else ImportRunStatus.COMPLETED
+                ImportRunStatus.PARTIAL if messages else ImportRunStatus.COMPLETED
             )
         except Exception as exc:
             db.rollback()

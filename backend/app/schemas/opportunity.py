@@ -68,6 +68,36 @@ class ScoreSnapshotRead(BaseModel):
     model_config = ConfigDict(from_attributes=True)
 
 
+class ValuationSnapshotRead(BaseModel):
+    id: UUID
+    opportunity_id: UUID
+    market_estimate: Decimal
+    conservative_sale_price: Decimal
+    price_low: Decimal
+    price_high: Decimal
+    sample_size: int
+    confidence: str
+    configuration_version: str
+    explanation: dict[str, object]
+    calculated_at: datetime
+    model_config = ConfigDict(from_attributes=True)
+
+
+class ComparableCollectionRead(BaseModel):
+    id: UUID
+    opportunity_id: UUID
+    source_url: str
+    status: str
+    requested_limit: int
+    found_count: int
+    usable_count: int
+    error_message: str | None
+    started_at: datetime
+    completed_at: datetime | None
+    valuation: ValuationSnapshotRead | None = None
+    model_config = ConfigDict(from_attributes=True)
+
+
 class OpportunityFeedItem(OpportunityRead):
     offer_title: str
     offer_url: str
@@ -79,3 +109,6 @@ class OpportunityFeedItem(OpportunityRead):
     ranking_reasons: list[str]
     scoring_version: str | None
     acquisition_id: UUID | None
+    valuation: ValuationSnapshotRead | None
+    latest_collection_status: str | None
+    latest_collection_usable_count: int | None

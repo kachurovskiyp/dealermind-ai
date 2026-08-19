@@ -36,3 +36,8 @@ app.mount("/assets", StaticFiles(directory=web_dir), name="assets")
 @app.get("/", include_in_schema=False)
 def web_app() -> FileResponse:
     return FileResponse(web_dir / "index.html")
+
+
+@app.get("/market", include_in_schema=False)
+def market_dashboard() -> FileResponse:
+    return FileResponse(web_dir / "market.html")

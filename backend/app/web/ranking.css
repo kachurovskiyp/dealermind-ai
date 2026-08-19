@@ -7,3 +7,19 @@
   margin-top: 8px;
   max-width: 430px;
 }
+.valuation-note { color: var(--muted); font-size: 11px; margin-top: 7px; }
+.valuation-note strong { color: var(--ink); }
+.collection-status { position: fixed; top: 84px; left: 50%; transform: translateX(-50%); z-index: 25; width: min(620px,calc(100% - 32px)); display: grid; grid-template-columns: auto 1fr auto; align-items: center; gap: 14px; padding: 15px 18px; border: 1px solid #a9d655; border-radius: 14px; background: #f8ffe9; box-shadow: 0 14px 40px #1d302326; }
+.collection-status strong, .collection-status span { display: block; }
+.collection-status strong { font-size: 14px; }
+.collection-status span:not(.collection-spinner) { margin-top: 3px; color: var(--muted); font-size: 12px; }
+.collection-status time { font-size: 12px; font-weight: 800; color: var(--green); }
+.collection-spinner { width: 22px; height: 22px; border: 3px solid #dceabd; border-top-color: var(--green); border-radius: 50%; animation: collection-spin .8s linear infinite; }
+@keyframes collection-spin { to { transform: rotate(360deg); } }
+.rejected-opportunities { margin-top: 18px; border: 1px solid var(--line); border-radius: 14px; background: #ebece7; overflow: hidden; }
+.rejected-opportunities summary { display: flex; align-items: center; justify-content: space-between; padding: 15px 18px; color: var(--muted); font-size: 13px; font-weight: 750; cursor: pointer; list-style: none; }
+.rejected-opportunities summary::-webkit-details-marker { display: none; }
+.rejected-opportunities summary strong { min-width: 28px; padding: 4px 8px; border-radius: 999px; background: #dfe1dc; color: var(--ink); text-align: center; font-size: 11px; }
+.rejected-opportunities[open] summary { border-bottom: 1px solid var(--line); }
+.rejected-list { display: grid; gap: 10px; padding: 12px; }
+.rejected-list .opportunity { opacity: .72; background: #f8f8f5; }
