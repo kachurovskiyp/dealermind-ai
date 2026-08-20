@@ -22,6 +22,19 @@ class LinkPreviewRead(BaseModel):
     price: Decimal | None = Field(default=None, gt=0)
     currency: Currency | None = None
     location: str | None = None
+    location_region: str | None = None
+    country_code: str | None = Field(default=None, min_length=2, max_length=2)
     seller_type: str | None = None
+    generation: str | None = None
+    body_type: str | None = None
+    engine_marketing_name: str | None = None
+    engine_capacity_cc: int | None = Field(default=None, ge=0)
+    power_hp: int | None = Field(default=None, ge=0)
+    fuel_type: str | None = None
+    gearbox: str | None = None
+    drivetrain: str | None = None
+    trim_line: str | None = None
+    performance_variant: str | None = None
+    specification_evidence: list[dict[str, object]] = Field(default_factory=list)
     extracted_fields: list[str]
     warnings: list[str]

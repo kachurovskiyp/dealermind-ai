@@ -1,9 +1,11 @@
-from app.models.automation import ImportRun, ImportSource
+from app.models.automation import ImportRun, ImportSource, MarketSegmentSnapshot
 from app.models.domain import (
     Acquisition,
     ComparableCollection,
     ComparableListing,
     InventoryItem,
+    LogisticsProfile,
+    LogisticsSnapshot,
     Market,
     Marketplace,
     Offer,
@@ -15,6 +17,7 @@ from app.models.domain import (
     ScoreSnapshot,
     Vehicle,
     VehicleEvent,
+    VehicleSpecificationObservation,
     ValuationSnapshot,
 )
 
@@ -23,9 +26,12 @@ __all__ = [
     "ComparableCollection",
     "ComparableListing",
     "InventoryItem",
+    "LogisticsProfile",
+    "LogisticsSnapshot",
     "ImportRun",
     "ImportSource",
     "Market",
+    "MarketSegmentSnapshot",
     "Marketplace",
     "Offer",
     "Opportunity",
@@ -36,5 +42,6 @@ __all__ = [
     "ScoreSnapshot",
     "Vehicle",
     "VehicleEvent",
+    "VehicleSpecificationObservation",
     "ValuationSnapshot",
 ]

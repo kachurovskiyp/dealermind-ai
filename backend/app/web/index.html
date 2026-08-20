@@ -15,10 +15,15 @@
     <a class="brand" href="/" aria-label="DealerMind, главная">
       <span class="brand-mark">DM</span><span>DealerMind</span>
     </a>
-    <nav><a href="#feed">Возможности</a><a href="#sources">Источники</a><a href="/market">Аналитика рынка</a><a href="/docs">API</a></nav>
-    <button class="secondary" data-open="import">Импорт файла</button>
-    <button class="secondary" data-open="link">Добавить по ссылке</button>
-    <button class="primary" data-open="listing">+ Новое объявление</button>
+    <nav><a href="#feed">Возможности</a><a href="#sources">Источники</a><a href="/market">Аналитика рынка</a><a href="#" data-open-logistics>Логистика</a><a href="/docs">API</a></nav>
+    <details class="add-listing-menu">
+      <summary class="primary">+ Добавить объявление</summary>
+      <div class="add-listing-popover">
+        <button type="button" data-open="link"><strong>По ссылке</strong><span>Распознать объявление Otomoto</span></button>
+        <button type="button" data-open="listing"><strong>Вручную</strong><span>Заполнить данные самостоятельно</span></button>
+        <button type="button" data-open="import"><strong>Импорт файла</strong><span>Загрузить CSV или JSON</span></button>
+      </div>
+    </details>
   </header>
 
   <aside id="collection-status" class="collection-status hidden" role="status" aria-live="polite">
@@ -81,12 +86,23 @@
       <div class="dialog-head"><div><p class="eyebrow">Новая возможность</p><h2>Добавить объявление</h2></div><button type="button" class="icon-button" data-close aria-label="Закрыть">×</button></div>
       <div class="form-grid">
         <input name="external_id" type="hidden">
+        <input name="image_url" type="hidden">
+        <input name="specification_evidence" type="hidden">
         <label class="wide">Площадка<select name="marketplace_id" required></select></label>
         <label class="wide">Заголовок<input name="title" placeholder="Volkswagen Passat 2019"></label>
         <label>Марка<input name="make" placeholder="Volkswagen" required></label>
         <label>Модель<input name="model" placeholder="Passat" required></label>
+        <label>Поколение<input name="generation" placeholder="B8 / C8 / G20"></label>
+        <label>Кузов<input name="body_type" placeholder="Sedan / Kombi / SUV"></label>
+        <label>Версия двигателя<input name="engine_marketing_name" placeholder="40 TDI / 320d"></label>
+        <label>Мощность, л.с.<input name="power_hp" type="number" min="0" placeholder="204"></label>
+        <label>Привод<input name="drivetrain" placeholder="quattro / xDrive / FWD"></label>
+        <label>Комплектация<input name="trim_line" placeholder="S line / M Sport"></label>
         <label>Год<input name="year" type="number" min="1886" max="2100" placeholder="2019"></label>
         <label>Пробег, км<input name="mileage_km" type="number" min="0" placeholder="145000"></label>
+        <label>Населённый пункт<input name="location" placeholder="Poznań"></label>
+        <label>Регион<input name="location_region" placeholder="Wielkopolskie"></label>
+        <label>Продавец<select name="seller_type"><option value="">Не определён</option><option value="private">Частное лицо</option><option value="dealer">Дилер</option></select></label>
         <label class="wide">Ссылка<input name="url" type="url" placeholder="https://…" required></label>
         <label>Цена объявления<input name="price" type="number" min="1" step="0.01" required></label>
         <label>Валюта<select name="currency"><option>PLN</option><option>EUR</option><option>UAH</option></select></label>
@@ -146,6 +162,25 @@
       <p><a href="/assets/listings-template.csv" download>Скачать шаблон CSV</a></p>
       <p id="import-error" class="error" role="alert"></p>
       <div class="dialog-actions"><button type="button" data-close-import class="secondary">Отмена</button><button type="submit" class="primary">Импортировать</button></div>
+    </form>
+  </dialog>
+
+  <dialog id="logistics-dialog">
+    <form id="logistics-form" method="dialog">
+      <div class="dialog-head"><div><p class="eyebrow">Logistics Cost v1</p><h2>Профиль логистики</h2></div><button type="button" class="icon-button" data-close-logistics aria-label="Закрыть">×</button></div>
+      <p class="lede small">Укажите вашу базу и тарифы. Расстояние считается ориентировочно; все составляющие сохраняются в истории расчёта.</p>
+      <div class="form-grid">
+        <label class="wide">Название профиля<input name="name" value="Основная база" required></label>
+        <label class="wide">Город отправления<input name="origin_label" placeholder="Poznań, Wielkopolskie" required></label>
+        <label>Страна базы<input name="origin_country_code" value="PL" minlength="2" maxlength="2" required></label>
+        <label>Валюта<select name="currency"><option>PLN</option><option>EUR</option><option>UAH</option></select></label>
+        <label>Фиксированный выезд<input name="fixed_cost" type="number" min="0" step="0.01" value="0" required></label>
+        <label>Стоимость за км<input name="cost_per_km" type="number" min="0.01" step="0.01" value="2.50" required></label>
+        <label>Множитель поездки<input name="trip_multiplier" type="number" min="1" max="4" step="0.1" value="2" required><small>2 = дорога туда и обратно</small></label>
+        <label>Доплата за границу<input name="cross_border_surcharge" type="number" min="0" step="0.01" value="0" required></label>
+      </div>
+      <p id="logistics-error" class="error" role="alert"></p>
+      <div class="dialog-actions"><button type="button" data-close-logistics class="secondary">Отмена</button><button type="submit" class="primary">Сохранить профиль</button></div>
     </form>
   </dialog>
 

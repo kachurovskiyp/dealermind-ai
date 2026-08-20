@@ -42,6 +42,7 @@ def test_structured_provider_preserves_provider_identity() -> None:
         target_market_code="PL",
         external_id="offer-1",
         url="https://example.com/1",
+        image_url="https://example.com/1.jpg",
         title="VW Passat",
         make="VW",
         model="Passat",
@@ -52,3 +53,4 @@ def test_structured_provider_preserves_provider_identity() -> None:
 
     assert provider.name == "test-feed"
     assert provider.records() == [record]
+    assert str(provider.records()[0].image_url) == "https://example.com/1.jpg"

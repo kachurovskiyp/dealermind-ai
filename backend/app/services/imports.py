@@ -13,6 +13,7 @@ from app.models.domain import (
     Opportunity,
     PriceObservation,
     Vehicle,
+    VehicleSpecificationObservation,
     utcnow,
 )
 from app.schemas.imports import ImportErrorRead, ListingImportRecord, ListingImportResult
@@ -27,6 +28,52 @@ class ImportCounters:
     unchanged: int = 0
     errors: list[ImportErrorRead] = field(default_factory=list)
     offer_ids: list[UUID] = field(default_factory=list)
+
+
+VARIANT_FIELDS = (
+    "generation",
+    "body_type",
+    "engine_marketing_name",
+    "engine_code",
+    "engine_capacity_cc",
+    "power_hp",
+    "power_kw",
+    "fuel_type",
+    "gearbox",
+    "drivetrain",
+    "trim_line",
+    "performance_variant",
+)
+
+
+def _append_specification_evidence(
+    db: Session,
+    offer: Offer,
+    record: ListingImportRecord,
+    changed_fields: set[str],
+) -> None:
+    evidence_by_field = {
+        str(item.get("field_name")): item
+        for item in record.specification_evidence
+        if item.get("field_name")
+    }
+    for field_name in changed_fields:
+        value = getattr(record, field_name)
+        if value is None:
+            continue
+        evidence = evidence_by_field.get(field_name, {})
+        db.add(
+            VehicleSpecificationObservation(
+                vehicle_id=offer.vehicle_id,
+                offer_id=offer.id,
+                field_name=field_name,
+                normalized_value=value,
+                raw_value=str(evidence.get("raw_value") or value),
+                source=str(evidence.get("source") or "structured_import"),
+                confidence=Decimal(str(evidence.get("confidence", 0.8))),
+                confirmed=False,
+            )
+        )
 
 
 def _market(db: Session, code: str) -> Market:
@@ -60,6 +107,16 @@ def _vehicle(db: Session, record: ListingImportRecord) -> Vehicle:
             year=record.year,
             fuel_type=record.fuel_type,
             gearbox=record.gearbox,
+            generation=record.generation,
+            body_type=record.body_type,
+            engine_marketing_name=record.engine_marketing_name,
+            engine_code=record.engine_code,
+            engine_capacity_cc=record.engine_capacity_cc,
+            power_hp=record.power_hp,
+            power_kw=record.power_kw,
+            drivetrain=record.drivetrain,
+            trim_line=record.trim_line,
+            performance_variant=record.performance_variant,
         )
         db.add(vehicle)
         db.flush()
@@ -90,10 +147,17 @@ def _create(
         mileage_km=record.mileage_km,
         location=record.location,
         seller_type=record.seller_type,
-        raw_data={"provider": provider_name, "imported": True},
+        raw_data={
+            "provider": provider_name,
+            "imported": True,
+            "image_url": str(record.image_url) if record.image_url else None,
+            "location_region": record.location_region,
+            "country_code": record.country_code,
+        },
     )
     db.add(offer)
     db.flush()
+    _append_specification_evidence(db, offer, record, set(VARIANT_FIELDS))
     db.add(PriceObservation(offer_id=offer.id, amount=record.price, currency=record.currency))
     opportunity = Opportunity(
         offer_id=offer.id,
@@ -111,6 +175,15 @@ def _create(
 
 
 def _update(db: Session, offer: Offer, record: ListingImportRecord) -> bool:
+    image_url = str(record.image_url) if record.image_url else None
+    location_changed = any(
+        (
+            record.location_region is not None
+            and offer.raw_data.get("location_region") != record.location_region,
+            record.country_code is not None
+            and offer.raw_data.get("country_code") != record.country_code,
+        )
+    )
     data_changed = any(
         (
             offer.url != str(record.url),
@@ -119,6 +192,8 @@ def _update(db: Session, offer: Offer, record: ListingImportRecord) -> bool:
             offer.mileage_km != record.mileage_km,
             offer.location != record.location,
             offer.seller_type != record.seller_type,
+            image_url is not None and offer.raw_data.get("image_url") != image_url,
+            location_changed,
         )
     )
     offer.url = str(record.url)
@@ -127,6 +202,14 @@ def _update(db: Session, offer: Offer, record: ListingImportRecord) -> bool:
     offer.mileage_km = record.mileage_km
     offer.location = record.location
     offer.seller_type = record.seller_type
+    if image_url is not None:
+        offer.raw_data = {**offer.raw_data, "image_url": image_url}
+    if record.location_region is not None or record.country_code is not None:
+        offer.raw_data = {
+            **offer.raw_data,
+            "location_region": record.location_region,
+            "country_code": record.country_code,
+        }
     offer.last_seen_at = utcnow()
     vehicle = offer.vehicle
     vehicle_updates = {
@@ -135,11 +218,25 @@ def _update(db: Session, offer: Offer, record: ListingImportRecord) -> bool:
         "year": record.year,
         "fuel_type": record.fuel_type,
         "gearbox": record.gearbox,
+        "generation": record.generation,
+        "body_type": record.body_type,
+        "engine_marketing_name": record.engine_marketing_name,
+        "engine_code": record.engine_code,
+        "engine_capacity_cc": record.engine_capacity_cc,
+        "power_hp": record.power_hp,
+        "power_kw": record.power_kw,
+        "drivetrain": record.drivetrain,
+        "trim_line": record.trim_line,
+        "performance_variant": record.performance_variant,
     }
+    changed_specifications: set[str] = set()
     for field_name, value in vehicle_updates.items():
         if value is not None and getattr(vehicle, field_name) != value:
             setattr(vehicle, field_name, value)
             data_changed = True
+            if field_name in VARIANT_FIELDS:
+                changed_specifications.add(field_name)
+    _append_specification_evidence(db, offer, record, changed_specifications)
     latest = db.scalar(
         select(PriceObservation)
         .where(PriceObservation.offer_id == offer.id)

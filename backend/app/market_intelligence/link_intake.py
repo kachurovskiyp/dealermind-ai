@@ -150,6 +150,42 @@ def _currency(value: object, page_text: str) -> Currency | None:
     return None
 
 
+def _seller_type(value: object) -> str | None:
+    normalized = (_text(value) or "").strip().lower()
+    if not normalized:
+        return None
+    dealer_markers = ("dealer", "business", "professional", "company", "firma", "organization")
+    private_markers = ("private", "individual", "person", "osoba prywatna", "prywatny")
+    if any(marker in normalized for marker in dealer_markers):
+        return "dealer"
+    if any(marker in normalized for marker in private_markers):
+        return "private"
+    return None
+
+
+def _title_variant(title: str | None) -> dict[str, str]:
+    if not title:
+        return {}
+    result: dict[str, str] = {}
+    engine = re.search(
+        r"\b(\d{2}\s?(?:TDI|TFSI|TSI)|\d{3}[die]|\d\.\d\s?(?:TDI|TFSI|TSI))\b",
+        title,
+        re.IGNORECASE,
+    )
+    if engine:
+        result["engine_marketing_name"] = engine.group(1).upper().replace("  ", " ")
+    for pattern, normalized in (
+        (r"\bS[ -]?line\b", "S line"),
+        (r"\bM[ -]?Sport\b", "M Sport"),
+        (r"\bAMG[ -]?Line\b", "AMG Line"),
+        (r"\bR[ -]?Line\b", "R-Line"),
+    ):
+        if re.search(pattern, title, re.IGNORECASE):
+            result["trim_line"] = normalized
+            break
+    return result
+
+
 def extract_listing_preview(html: str, source_url: str) -> LinkPreviewRead:
     soup = BeautifulSoup(html, "html.parser")
     objects = _json_ld_objects(soup)
@@ -179,7 +215,33 @@ def extract_listing_preview(html: str, source_url: str) -> LinkPreviewRead:
     mileage = _integer(product.get("mileageFromOdometer"))
     make = _text(brand) or _text(product.get("manufacturer"))
     model = _text(product.get("model"))
+    location = _text(product.get("areaServed"))
+    location_region = None
+    country_code = None
+    seller = offer_data.get("seller")
+    seller_type = _seller_type(
+        seller.get("@type") if isinstance(seller, dict) else seller
+    )
     external = _text(product.get("sku") or product.get("productID"))
+    specifications: dict[str, object] = {}
+    evidence: list[dict[str, object]] = []
+
+    def capture(field: str, raw: object, parser: object = _text) -> None:
+        if specifications.get(field) is not None or raw is None:
+            return
+        value = parser(raw) if callable(parser) else _text(raw)
+        if value is None:
+            return
+        specifications[field] = value
+        evidence.append(
+            {
+                "field_name": field,
+                "value": value,
+                "raw_value": _text(raw),
+                "source": "structured_page_data",
+                "confidence": 0.95,
+            }
+        )
     embedded = _embedded_json_objects(soup)
     for data in embedded:
         make = make or _text(_find_json_value(data, "make", "brand"))
@@ -195,6 +257,62 @@ def extract_listing_preview(html: str, source_url: str) -> LinkPreviewRead:
         external = external or _text(
             _find_json_value(data, "externalId", "advertId", "listingId")
         )
+        location = location or _text(
+            _find_json_value(data, "city", "cityName", "locality", "addressLocality")
+        )
+        location_region = location_region or _text(
+            _find_json_value(data, "region", "regionName", "province", "addressRegion")
+        )
+        country_code = country_code or _text(
+            _find_json_value(data, "countryCode", "addressCountry")
+        )
+        seller_type = seller_type or _seller_type(
+            _find_json_value(
+                data,
+                "sellerType",
+                "advertiserType",
+                "ownerType",
+                "sellerCategory",
+                "seller_type",
+            )
+        )
+        capture("generation", _find_json_value(data, "generation", "generationName"))
+        capture("body_type", _find_json_value(data, "bodyType", "vehicleBodyType"))
+        capture(
+            "engine_marketing_name",
+            _find_json_value(data, "engineVersion", "engineName", "engineVariant"),
+        )
+        capture(
+            "engine_capacity_cc",
+            _find_json_value(data, "engineCapacity", "engineDisplacement"),
+            _integer,
+        )
+        capture("power_hp", _find_json_value(data, "enginePower", "powerHp"), _integer)
+        capture("fuel_type", _find_json_value(data, "fuelType", "fuel"))
+        capture("gearbox", _find_json_value(data, "gearbox", "transmission"))
+        capture("drivetrain", _find_json_value(data, "driveType", "drivetrain"))
+        capture(
+            "trim_line",
+            _find_json_value(data, "trimLine", "equipmentVersion", "equipmentVariant"),
+        )
+        capture(
+            "performance_variant",
+            _find_json_value(data, "performanceVariant", "modelVariant"),
+        )
+    for field, value in _title_variant(title).items():
+        if specifications.get(field) is None:
+            specifications[field] = value
+            evidence.append(
+                {
+                    "field_name": field,
+                    "value": value,
+                    "raw_value": title,
+                    "source": "listing_title",
+                    "confidence": 0.75,
+                }
+            )
+    if country_code is None and (urlparse(source_url).hostname or "").endswith("otomoto.pl"):
+        country_code = "PL"
     if external is None:
         external = hashlib.sha256(source_url.encode()).hexdigest()[:24]
     page_text = soup.get_text(" ", strip=True)
@@ -208,8 +326,12 @@ def extract_listing_preview(html: str, source_url: str) -> LinkPreviewRead:
         "mileage_km": mileage,
         "price": price,
         "currency": _currency(currency_value, page_text),
-        "location": _text(product.get("areaServed")),
-        "seller_type": None,
+        "location": location,
+        "location_region": location_region,
+        "country_code": country_code.upper() if country_code else None,
+        "seller_type": seller_type,
+        **specifications,
+        "specification_evidence": evidence,
     }
     extracted = [key for key, value in values.items() if value is not None]
     labels = {"make": "Марка", "model": "Модель", "price": "Цена", "currency": "Валюта"}

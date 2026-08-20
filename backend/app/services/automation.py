@@ -16,6 +16,7 @@ from app.models.domain import utcnow
 from app.schemas.automation import ImportSourceCreate, ImportSourceUpdate
 from app.schemas.imports import ListingImportBatch
 from app.services.imports import import_listings
+from app.services.market_snapshots import create_market_snapshot
 
 logger = logging.getLogger(__name__)
 
@@ -149,6 +150,21 @@ async def execute_source(source_id: UUID, trigger: str) -> ImportRun:
             run.status = (
                 ImportRunStatus.PARTIAL if messages else ImportRunStatus.COMPLETED
             )
+            if source.provider_type == "otomoto_search" and result.offer_ids:
+                try:
+                    create_market_snapshot(
+                        db,
+                        source,
+                        run,
+                        result.offer_ids,
+                        new_count=result.created,
+                        updated_count=result.updated,
+                    )
+                except Exception as exc:
+                    messages.append(f"Снимок рынка не сохранён: {exc}")
+                    run.error_count = len(messages)
+                    run.error_message = "; ".join(messages)[:4000]
+                    run.status = ImportRunStatus.PARTIAL
         except Exception as exc:
             db.rollback()
             run = db.get(ImportRun, run.id)

@@ -59,7 +59,8 @@ def test_next_data_marketplace_payload_is_extracted() -> None:
     {"props":{"pageProps":{"advert":{"id":"98765","price":{"value":129900,
     "currency":"PLN"},"parameters":[{"key":"make","displayValue":"BMW"},
     {"key":"model","displayValue":"X5"},{"key":"year","value":"2021"},
-    {"key":"mileage","value":"82 500 km"}]}}}}
+    {"key":"mileage","value":"82 500 km"}],"location":{"cityName":"Poznań",
+    "regionName":"Wielkopolskie","countryCode":"PL"}}}}}
     </script></body></html>
     """
 
@@ -71,7 +72,44 @@ def test_next_data_marketplace_payload_is_extracted() -> None:
     assert preview.mileage_km == 82500
     assert preview.price == Decimal("129900")
     assert preview.currency.value == "PLN"
+    assert preview.location == "Poznań"
+    assert preview.location_region == "Wielkopolskie"
+    assert preview.country_code == "PL"
     assert preview.warnings == []
+
+
+def test_otomoto_seller_type_is_normalized() -> None:
+    html = """
+    <script id="__NEXT_DATA__" type="application/json">
+    {"props":{"advert":{"sellerType":"Osoba prywatna"}}}
+    </script>
+    """
+
+    preview = extract_listing_preview(html, "https://www.otomoto.pl/oferta/test")
+
+    assert preview.seller_type == "private"
+
+
+def test_structured_vehicle_variant_is_extracted_with_evidence() -> None:
+    html = """
+    <meta property="og:title" content="Audi A6 40 TDI S line">
+    <script id="__NEXT_DATA__" type="application/json">
+    {"advert":{"parameters":[{"key":"generation","value":"C8"},
+    {"key":"bodyType","value":"Kombi"},{"key":"enginePower","value":"204 KM"},
+    {"key":"driveType","value":"quattro"}]}}
+    </script>
+    """
+
+    preview = extract_listing_preview(html, "https://www.otomoto.pl/oferta/audi-a6")
+
+    assert preview.generation == "C8"
+    assert preview.body_type == "Kombi"
+    assert preview.power_hp == 204
+    assert preview.drivetrain == "quattro"
+    assert preview.engine_marketing_name == "40 TDI"
+    assert preview.trim_line == "S line"
+    assert any(item["source"] == "structured_page_data" for item in preview.specification_evidence)
+    assert any(item["source"] == "listing_title" for item in preview.specification_evidence)
 
 
 def test_private_network_urls_are_rejected() -> None:

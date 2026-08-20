@@ -17,6 +17,14 @@ class VehicleInput(BaseModel):
     gearbox: str | None = None
     engine_capacity_cc: int | None = Field(default=None, ge=0)
     power_kw: int | None = Field(default=None, ge=0)
+    power_hp: int | None = Field(default=None, ge=0)
+    body_type: str | None = None
+    facelift: bool | None = None
+    engine_marketing_name: str | None = None
+    engine_code: str | None = None
+    drivetrain: str | None = None
+    trim_line: str | None = None
+    performance_variant: str | None = None
 
 
 class OfferCreate(BaseModel):
@@ -57,5 +65,24 @@ class PriceObservationRead(BaseModel):
     offer_id: UUID
     amount: Decimal
     currency: Currency
+    observed_at: datetime
+    model_config = ConfigDict(from_attributes=True)
+
+
+class VehicleSpecificationConfirm(BaseModel):
+    field_name: str
+    value: str | int | bool
+
+
+class VehicleSpecificationObservationRead(BaseModel):
+    id: UUID
+    vehicle_id: UUID
+    offer_id: UUID
+    field_name: str
+    normalized_value: object
+    raw_value: str | None
+    source: str
+    confidence: Decimal
+    confirmed: bool
     observed_at: datetime
     model_config = ConfigDict(from_attributes=True)

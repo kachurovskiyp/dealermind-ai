@@ -10,3 +10,6 @@ def test_market_dashboard_and_read_api_are_registered() -> None:
     assert "/api/v1/market-intelligence/valuations" in api_paths
     assert "/api/v1/market-intelligence/collections" in api_paths
     assert "/api/v1/market-intelligence/collections/{collection_id}/listings" in api_paths
+    assert "/api/v1/market-intelligence/poland" in api_paths
+    assert "/api/v1/market-intelligence/poland/snapshots" in api_paths
+    assert "/api/v1/market-intelligence/poland/variants" in api_paths

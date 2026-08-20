@@ -1,6 +1,17 @@
 from fastapi import APIRouter
 
-from app.api.routes import acquisitions, automation, imports, intake, market_intelligence, markets, offers, opportunities, vehicles
+from app.api.routes import (
+    acquisitions,
+    automation,
+    imports,
+    intake,
+    logistics,
+    market_intelligence,
+    markets,
+    offers,
+    opportunities,
+    vehicles,
+)
 
 api_router = APIRouter()
 api_router.include_router(markets.router)
@@ -12,3 +23,4 @@ api_router.include_router(imports.router)
 api_router.include_router(automation.router)
 api_router.include_router(intake.router)
 api_router.include_router(market_intelligence.router)
+api_router.include_router(logistics.router)

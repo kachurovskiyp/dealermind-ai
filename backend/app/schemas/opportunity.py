@@ -5,6 +5,7 @@ from uuid import UUID
 from pydantic import BaseModel, ConfigDict, Field
 
 from app.models.domain import Currency, DecisionType, OpportunityStatus, ScoreKind
+from app.schemas.logistics import LogisticsSnapshotRead
 
 
 class OpportunityCreate(BaseModel):
@@ -101,9 +102,20 @@ class ComparableCollectionRead(BaseModel):
 class OpportunityFeedItem(OpportunityRead):
     offer_title: str
     offer_url: str
+    offer_image_url: str | None
+    offer_location: str | None
+    offer_location_region: str | None
+    offer_country_code: str | None
+    offer_seller_type: str | None
     vehicle_make: str
     vehicle_model: str
     vehicle_year: int | None
+    vehicle_generation: str | None
+    vehicle_body_type: str | None
+    vehicle_engine_marketing_name: str | None
+    vehicle_power_hp: int | None
+    vehicle_drivetrain: str | None
+    vehicle_trim_line: str | None
     latest_scores: dict[str, Decimal]
     ranking_label: str
     ranking_reasons: list[str]
@@ -112,3 +124,4 @@ class OpportunityFeedItem(OpportunityRead):
     valuation: ValuationSnapshotRead | None
     latest_collection_status: str | None
     latest_collection_usable_count: int | None
+    logistics: LogisticsSnapshotRead | None

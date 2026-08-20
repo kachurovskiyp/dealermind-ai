@@ -17,10 +17,86 @@ from app.schemas.market_intelligence import (
     CollectionHistoryRead,
     ComparableListingRead,
     MarketOverviewRead,
+    MarketSegmentSnapshotRead,
+    ModelVariantStatRead,
+    PolandMarketAnalyticsRead,
     ValuationHistoryRead,
 )
+from app.services.market_snapshots import list_market_snapshots
+from app.services.poland_analytics import model_variant_analytics, poland_market_analytics
 
 router = APIRouter(prefix="/market-intelligence", tags=["market intelligence"])
+
+
+@router.get("/poland/variants", response_model=list[ModelVariantStatRead])
+def poland_variants(
+    make: str,
+    model: str,
+    db: Session = Depends(get_db),
+) -> list[ModelVariantStatRead]:
+    return [
+        ModelVariantStatRead.model_validate(item)
+        for item in model_variant_analytics(db, make, model)
+    ]
+
+
+@router.get("/poland/snapshots", response_model=list[MarketSegmentSnapshotRead])
+def poland_snapshots(
+    source_id: UUID | None = None,
+    limit: int = 500,
+    db: Session = Depends(get_db),
+) -> list[MarketSegmentSnapshotRead]:
+    return [
+        MarketSegmentSnapshotRead(
+            id=item.id,
+            source_id=item.source_id,
+            run_id=item.run_id,
+            source_name=item.source.name,
+            market_code=item.market_code,
+            currency=item.currency,
+            listing_count=item.listing_count,
+            new_count=item.new_count,
+            updated_count=item.updated_count,
+            price_reduction_count=item.price_reduction_count,
+            median_price=item.median_price,
+            price_low=item.price_low,
+            price_high=item.price_high,
+            private_count=item.private_count,
+            dealer_count=item.dealer_count,
+            unknown_seller_count=item.unknown_seller_count,
+            dimensions=item.dimensions,
+            configuration_version=item.configuration_version,
+            captured_at=item.captured_at,
+        )
+        for item in list_market_snapshots(db, source_id=source_id, limit=limit)
+    ]
+
+
+@router.get("/poland", response_model=PolandMarketAnalyticsRead)
+def poland_analytics(
+    make: str | None = None,
+    model: str | None = None,
+    year_from: int | None = None,
+    year_to: int | None = None,
+    fuel_type: str | None = None,
+    gearbox: str | None = None,
+    seller_type: str | None = None,
+    region: str | None = None,
+    db: Session = Depends(get_db),
+) -> PolandMarketAnalyticsRead:
+    return PolandMarketAnalyticsRead.model_validate(
+        poland_market_analytics(
+            db,
+            make=make,
+            model=model,
+            year_from=year_from,
+            year_to=year_to,
+            fuel_type=fuel_type,
+            gearbox=gearbox,
+            seller_type=seller_type,
+            region=region,
+        )
+    )
 
 
 @router.get("/overview", response_model=MarketOverviewRead)

@@ -60,3 +60,10 @@ def test_opportunity_lifecycle_accepts_valid_transition() -> None:
 def test_rejected_opportunity_must_be_reopened_before_accepting() -> None:
     with pytest.raises(InvalidOpportunityTransition, match="not allowed"):
         next_opportunity_status(OpportunityStatus.REJECTED, DecisionType.ACCEPT)
+
+
+def test_accepted_opportunity_can_be_rejected_before_acquisition() -> None:
+    assert (
+        next_opportunity_status(OpportunityStatus.ACCEPTED, DecisionType.REJECT)
+        is OpportunityStatus.REJECTED
+    )

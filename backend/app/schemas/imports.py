@@ -12,6 +12,7 @@ class ListingImportRecord(BaseModel):
     target_market_code: str = Field(min_length=2, max_length=2, pattern=r"^[A-Z]{2}$")
     external_id: str = Field(min_length=1, max_length=200)
     url: HttpUrl
+    image_url: HttpUrl | None = None
     title: str = Field(min_length=1, max_length=500)
     make: str = Field(min_length=1, max_length=100)
     model: str = Field(min_length=1, max_length=100)
@@ -20,7 +21,20 @@ class ListingImportRecord(BaseModel):
     mileage_km: int | None = Field(default=None, ge=0)
     fuel_type: str | None = None
     gearbox: str | None = None
+    generation: str | None = None
+    body_type: str | None = None
+    engine_marketing_name: str | None = None
+    engine_code: str | None = None
+    engine_capacity_cc: int | None = Field(default=None, ge=0)
+    power_hp: int | None = Field(default=None, ge=0)
+    power_kw: int | None = Field(default=None, ge=0)
+    drivetrain: str | None = None
+    trim_line: str | None = None
+    performance_variant: str | None = None
+    specification_evidence: list[dict[str, object]] = Field(default_factory=list)
     location: str | None = None
+    location_region: str | None = None
+    country_code: str | None = Field(default=None, min_length=2, max_length=2)
     seller_type: str | None = None
     description: str | None = None
     price: Decimal = Field(gt=0)
@@ -28,7 +42,7 @@ class ListingImportRecord(BaseModel):
     expected_sale_price: Decimal | None = Field(default=None, gt=0)
     expected_costs: Decimal = Field(default=Decimal(0), ge=0)
 
-    @field_validator("market_code", "target_market_code", mode="before")
+    @field_validator("market_code", "target_market_code", "country_code", mode="before")
     @classmethod
     def normalize_market_code(cls, value: object) -> object:
         return value.upper() if isinstance(value, str) else value

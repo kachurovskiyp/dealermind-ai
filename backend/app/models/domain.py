@@ -128,15 +128,26 @@ class Vehicle(TimestampMixin, Base):
     make: Mapped[str] = mapped_column(String(100), index=True)
     model: Mapped[str] = mapped_column(String(100), index=True)
     generation: Mapped[str | None] = mapped_column(String(100))
+    body_type: Mapped[str | None] = mapped_column(String(80))
+    facelift: Mapped[bool | None] = mapped_column(nullable=True)
+    engine_marketing_name: Mapped[str | None] = mapped_column(String(100))
+    engine_code: Mapped[str | None] = mapped_column(String(100))
     year: Mapped[int | None] = mapped_column(Integer, index=True)
     fuel_type: Mapped[str | None] = mapped_column(String(50))
     gearbox: Mapped[str | None] = mapped_column(String(50))
     engine_capacity_cc: Mapped[int | None] = mapped_column(Integer)
     power_kw: Mapped[int | None] = mapped_column(Integer)
+    power_hp: Mapped[int | None] = mapped_column(Integer)
+    drivetrain: Mapped[str | None] = mapped_column(String(80))
+    trim_line: Mapped[str | None] = mapped_column(String(100))
+    performance_variant: Mapped[str | None] = mapped_column(String(100))
     offers: Mapped[list["Offer"]] = relationship(back_populates="vehicle")
     inventory_items: Mapped[list["InventoryItem"]] = relationship(back_populates="vehicle")
     events: Mapped[list["VehicleEvent"]] = relationship(
         back_populates="vehicle", order_by="VehicleEvent.occurred_at"
+    )
+    specification_observations: Mapped[list["VehicleSpecificationObservation"]] = relationship(
+        back_populates="vehicle", order_by="VehicleSpecificationObservation.observed_at"
     )
 
 
@@ -205,6 +216,51 @@ class Opportunity(TimestampMixin, Base):
     comparable_collections: Mapped[list["ComparableCollection"]] = relationship(
         back_populates="opportunity", order_by="ComparableCollection.started_at"
     )
+    logistics_snapshots: Mapped[list["LogisticsSnapshot"]] = relationship(
+        back_populates="opportunity", order_by="LogisticsSnapshot.calculated_at"
+    )
+
+
+class LogisticsProfile(TimestampMixin, Base):
+    __tablename__ = "logistics_profiles"
+    id: Mapped[UUID] = mapped_column(PGUUID(as_uuid=True), primary_key=True, default=uuid4)
+    name: Mapped[str] = mapped_column(String(100), default="Основная база")
+    origin_label: Mapped[str] = mapped_column(String(255))
+    origin_country_code: Mapped[str] = mapped_column(String(2))
+    origin_latitude: Mapped[Decimal] = mapped_column(Numeric(9, 6))
+    origin_longitude: Mapped[Decimal] = mapped_column(Numeric(9, 6))
+    fixed_cost: Mapped[Decimal] = mapped_column(Numeric(14, 2), default=Decimal(0))
+    cost_per_km: Mapped[Decimal] = mapped_column(Numeric(10, 2))
+    trip_multiplier: Mapped[Decimal] = mapped_column(Numeric(4, 2), default=Decimal("2.00"))
+    cross_border_surcharge: Mapped[Decimal] = mapped_column(
+        Numeric(14, 2), default=Decimal(0)
+    )
+    currency: Mapped[Currency] = mapped_column(Enum(Currency, name="logistics_currency"))
+    snapshots: Mapped[list["LogisticsSnapshot"]] = relationship(back_populates="profile")
+
+
+class LogisticsSnapshot(Base):
+    __tablename__ = "logistics_snapshots"
+    id: Mapped[UUID] = mapped_column(PGUUID(as_uuid=True), primary_key=True, default=uuid4)
+    opportunity_id: Mapped[UUID] = mapped_column(ForeignKey("opportunities.id"), index=True)
+    profile_id: Mapped[UUID] = mapped_column(ForeignKey("logistics_profiles.id"), index=True)
+    origin_label: Mapped[str] = mapped_column(String(255))
+    destination_label: Mapped[str] = mapped_column(String(255))
+    origin_latitude: Mapped[Decimal] = mapped_column(Numeric(9, 6))
+    origin_longitude: Mapped[Decimal] = mapped_column(Numeric(9, 6))
+    destination_latitude: Mapped[Decimal] = mapped_column(Numeric(9, 6))
+    destination_longitude: Mapped[Decimal] = mapped_column(Numeric(9, 6))
+    distance_km: Mapped[Decimal] = mapped_column(Numeric(10, 1))
+    fixed_cost: Mapped[Decimal] = mapped_column(Numeric(14, 2))
+    distance_cost: Mapped[Decimal] = mapped_column(Numeric(14, 2))
+    cross_border_cost: Mapped[Decimal] = mapped_column(Numeric(14, 2))
+    total_cost: Mapped[Decimal] = mapped_column(Numeric(14, 2))
+    currency: Mapped[Currency] = mapped_column(Enum(Currency, name="logistics_snapshot_currency"))
+    configuration_version: Mapped[str] = mapped_column(String(100))
+    explanation: Mapped[dict[str, object]] = mapped_column(JSONB)
+    calculated_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=utcnow)
+    opportunity: Mapped[Opportunity] = relationship(back_populates="logistics_snapshots")
+    profile: Mapped[LogisticsProfile] = relationship(back_populates="snapshots")
 
 
 class ValuationSnapshot(Base):
@@ -250,10 +306,34 @@ class ComparableListing(Base):
     model: Mapped[str] = mapped_column(String(100), index=True)
     year: Mapped[int | None] = mapped_column(Integer)
     mileage_km: Mapped[int | None] = mapped_column(Integer)
+    generation: Mapped[str | None] = mapped_column(String(100))
+    body_type: Mapped[str | None] = mapped_column(String(80))
+    engine_marketing_name: Mapped[str | None] = mapped_column(String(100))
+    power_hp: Mapped[int | None] = mapped_column(Integer)
+    fuel_type: Mapped[str | None] = mapped_column(String(50))
+    gearbox: Mapped[str | None] = mapped_column(String(50))
+    drivetrain: Mapped[str | None] = mapped_column(String(80))
+    trim_line: Mapped[str | None] = mapped_column(String(100))
+    performance_variant: Mapped[str | None] = mapped_column(String(100))
     price: Mapped[Decimal] = mapped_column(Numeric(14, 2))
     currency: Mapped[Currency] = mapped_column(Enum(Currency, name="comparable_currency"))
     observed_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=utcnow)
     collection: Mapped[ComparableCollection] = relationship(back_populates="listings")
+
+
+class VehicleSpecificationObservation(Base):
+    __tablename__ = "vehicle_specification_observations"
+    id: Mapped[UUID] = mapped_column(PGUUID(as_uuid=True), primary_key=True, default=uuid4)
+    vehicle_id: Mapped[UUID] = mapped_column(ForeignKey("vehicles.id"), index=True)
+    offer_id: Mapped[UUID] = mapped_column(ForeignKey("offers.id"), index=True)
+    field_name: Mapped[str] = mapped_column(String(100), index=True)
+    normalized_value: Mapped[object] = mapped_column(JSONB)
+    raw_value: Mapped[str | None] = mapped_column(Text)
+    source: Mapped[str] = mapped_column(String(50))
+    confidence: Mapped[Decimal] = mapped_column(Numeric(4, 3))
+    confirmed: Mapped[bool] = mapped_column(default=False)
+    observed_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=utcnow)
+    vehicle: Mapped[Vehicle] = relationship(back_populates="specification_observations")
 
 
 class ScoreSnapshot(Base):
@@ -372,6 +452,8 @@ for history_model in (
     ScoreSnapshot,
     ValuationSnapshot,
     ComparableListing,
+    LogisticsSnapshot,
+    VehicleSpecificationObservation,
     OpportunityDecision,
     VehicleEvent,
 ):

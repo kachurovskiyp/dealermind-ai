@@ -1,4 +1,7 @@
-from app.models.automation import ImportRunStatus, ImportSource
+from sqlalchemy import event
+
+from app.models.automation import ImportRunStatus, ImportSource, MarketSegmentSnapshot
+from app.models.domain import _reject_history_mutation
 from app.schemas.automation import ImportSourceCreate
 from app.services.automation import _batch_from_response
 
@@ -19,7 +22,14 @@ def listing_payload() -> dict[str, object]:
 
 
 def test_import_automation_tables_are_registered() -> None:
-    assert {"import_sources", "import_runs"}.issubset(ImportSource.metadata.tables)
+    assert {"import_sources", "import_runs", "market_segment_snapshots"}.issubset(
+        ImportSource.metadata.tables
+    )
+
+
+def test_market_segment_snapshots_are_append_only() -> None:
+    assert event.contains(MarketSegmentSnapshot, "before_update", _reject_history_mutation)
+    assert event.contains(MarketSegmentSnapshot, "before_delete", _reject_history_mutation)
 
 
 def test_source_schedule_has_safe_bounds() -> None:

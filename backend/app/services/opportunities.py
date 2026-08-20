@@ -28,7 +28,7 @@ ALLOWED_DECISIONS: dict[OpportunityStatus, set[DecisionType]] = {
     OpportunityStatus.EVALUATING: {DecisionType.ACCEPT, DecisionType.REJECT},
     OpportunityStatus.REJECTED: {DecisionType.REOPEN},
     OpportunityStatus.EXPIRED: {DecisionType.REOPEN},
-    OpportunityStatus.ACCEPTED: set(),
+    OpportunityStatus.ACCEPTED: {DecisionType.REJECT},
     OpportunityStatus.ACQUIRED: set(),
 }
 
@@ -60,6 +60,7 @@ def opportunity_feed(db: Session) -> list[dict[str, object]]:
             selectinload(Opportunity.scores),
             selectinload(Opportunity.valuations),
             selectinload(Opportunity.comparable_collections),
+            selectinload(Opportunity.logistics_snapshots),
             selectinload(Opportunity.acquisition),
         )
         .order_by(Opportunity.created_at.desc())
@@ -77,6 +78,11 @@ def opportunity_feed(db: Session) -> list[dict[str, object]]:
         latest_collection = (
             opportunity.comparable_collections[-1]
             if opportunity.comparable_collections
+            else None
+        )
+        logistics = (
+            opportunity.logistics_snapshots[-1]
+            if opportunity.logistics_snapshots
             else None
         )
         reasons: list[str] = []
@@ -99,9 +105,22 @@ def opportunity_feed(db: Session) -> list[dict[str, object]]:
                 },
                 "offer_title": opportunity.offer.title,
                 "offer_url": opportunity.offer.url,
+                "offer_image_url": opportunity.offer.raw_data.get("image_url"),
+                "offer_location": opportunity.offer.location,
+                "offer_location_region": opportunity.offer.raw_data.get("location_region"),
+                "offer_country_code": opportunity.offer.raw_data.get("country_code"),
+                "offer_seller_type": opportunity.offer.seller_type,
                 "vehicle_make": opportunity.offer.vehicle.make,
                 "vehicle_model": opportunity.offer.vehicle.model,
                 "vehicle_year": opportunity.offer.vehicle.year,
+                "vehicle_generation": opportunity.offer.vehicle.generation,
+                "vehicle_body_type": opportunity.offer.vehicle.body_type,
+                "vehicle_engine_marketing_name": (
+                    opportunity.offer.vehicle.engine_marketing_name
+                ),
+                "vehicle_power_hp": opportunity.offer.vehicle.power_hp,
+                "vehicle_drivetrain": opportunity.offer.vehicle.drivetrain,
+                "vehicle_trim_line": opportunity.offer.vehicle.trim_line,
                 "latest_scores": latest_scores,
                 "ranking_label": ranking_label(
                     ranking_snapshot.value if ranking_snapshot is not None else None
@@ -122,6 +141,7 @@ def opportunity_feed(db: Session) -> list[dict[str, object]]:
                 "latest_collection_usable_count": (
                     latest_collection.usable_count if latest_collection is not None else None
                 ),
+                "logistics": logistics,
             }
         )
     feed.sort(
@@ -173,6 +193,15 @@ def record_decision(
     opportunity = db.get(Opportunity, opportunity_id)
     if opportunity is None:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Opportunity not found")
+    if (
+        opportunity.status is OpportunityStatus.ACCEPTED
+        and payload.decision is DecisionType.REJECT
+        and opportunity.acquisition is not None
+    ):
+        raise HTTPException(
+            status_code=status.HTTP_409_CONFLICT,
+            detail="Нельзя отказаться от возможности после начала покупки",
+        )
     try:
         next_status = next_opportunity_status(opportunity.status, payload.decision)
     except InvalidOpportunityTransition as exc:

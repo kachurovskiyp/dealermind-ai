@@ -95,12 +95,26 @@ async def collect_otomoto_records(
                         target_market_code="PL",
                         external_id=preview.external_id,
                         url=preview.source_url,
+                        image_url=preview.image_url,
                         title=preview.title or f"{preview.make} {preview.model}",
                         make=preview.make,
                         model=preview.model,
                         year=preview.year,
                         mileage_km=preview.mileage_km,
+                        generation=preview.generation,
+                        body_type=preview.body_type,
+                        engine_marketing_name=preview.engine_marketing_name,
+                        engine_capacity_cc=preview.engine_capacity_cc,
+                        power_hp=preview.power_hp,
+                        fuel_type=preview.fuel_type,
+                        gearbox=preview.gearbox,
+                        drivetrain=preview.drivetrain,
+                        trim_line=preview.trim_line,
+                        performance_variant=preview.performance_variant,
+                        specification_evidence=preview.specification_evidence,
                         location=preview.location,
+                        location_region=preview.location_region,
+                        country_code=preview.country_code,
                         seller_type=preview.seller_type,
                         description=preview.description,
                         price=preview.price,
@@ -112,4 +126,3 @@ async def collect_otomoto_records(
             if index + 1 < len(urls):
                 await asyncio.sleep(0.75)
     return records, errors
-

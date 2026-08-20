@@ -1,7 +1,90 @@
-<!doctype html><html lang="ru"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>DealerMind — аналитика рынка</title><link rel="stylesheet" href="/assets/styles.css"><link rel="stylesheet" href="/assets/market.css"></head><body>
-<header class="topbar"><a class="brand" href="/"><span class="brand-mark">DM</span><span>DealerMind</span></a><nav><a href="/">Возможности</a><a href="/market">Аналитика рынка</a><a href="/docs">API</a></nav></header>
-<main class="market-main"><section class="market-hero"><p class="eyebrow">Comparable Market</p><h1>Аналитика рынка</h1><p class="lede">История рыночных оценок и объявления, на которых основаны расчёты.</p></section>
-<section class="market-metrics"><article><span>Собрано аналогов</span><strong id="stat-listings">—</strong></article><article><span>Сборов</span><strong id="stat-collections">—</strong></article><article><span>Оценок</span><strong id="stat-valuations">—</strong></article><article><span>Оценено возможностей</span><strong id="stat-opportunities">—</strong></article></section>
-<section><div class="market-section-head"><div><p class="eyebrow">Valuation history</p><h2>История оценок</h2></div></div><div id="valuation-history" class="market-table"><div class="market-empty">Загружаем оценки…</div></div></section>
-<section class="collection-section"><div class="market-section-head"><div><p class="eyebrow">Evidence</p><h2>Сборы аналогов</h2></div></div><div id="collection-history" class="collection-history"><div class="market-empty">Загружаем историю…</div></div></section>
-</main><div id="toast" role="status"></div><script src="/assets/market.js" defer></script></body></html>
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>DealerMind — рынок Польши</title>
+  <link rel="stylesheet" href="/assets/styles.css">
+  <link rel="stylesheet" href="/assets/market.css">
+</head>
+<body>
+  <header class="topbar">
+    <a class="brand" href="/"><span class="brand-mark">DM</span><span>DealerMind</span></a>
+    <nav><a href="/">Возможности</a><a href="/market">Рынок Польши</a><a href="/docs">API</a></nav>
+  </header>
+  <main class="market-main">
+    <section class="market-hero">
+      <p class="eyebrow">Poland Market Intelligence</p>
+      <h1>Рынок Польши</h1>
+      <p class="lede">Предложение, цены и сигналы продавцов на основе объявлений, которые уже наблюдает DealerMind.</p>
+    </section>
+
+    <form id="market-filters" class="market-filters">
+      <label>Марка<select name="make"><option value="">Все марки</option></select></label>
+      <label>Модель<select name="model" disabled><option value="">Сначала выберите марку</option></select></label>
+      <label>Год от<input name="year_from" type="number" min="1990" max="2100" placeholder="2018"></label>
+      <label>Год до<input name="year_to" type="number" min="1990" max="2100" placeholder="2024"></label>
+      <label>Топливо<select name="fuel_type"><option value="">Любое</option></select></label>
+      <label>Коробка<select name="gearbox"><option value="">Любая</option></select></label>
+      <label>Продавец<select name="seller_type"><option value="">Все</option><option value="private">Частное лицо</option><option value="dealer">Дилер</option><option value="unknown">Не определён</option></select></label>
+      <label>Воеводство<select name="region"><option value="">Вся Польша</option></select></label>
+      <div class="filter-actions"><button type="submit" class="primary">Применить</button><button type="reset" class="secondary">Сбросить</button></div>
+    </form>
+
+    <section class="market-metrics market-metrics-v2">
+      <article><span>Объявлений</span><strong id="stat-listings">—</strong><small id="stat-active">— активных</small></article>
+      <article><span>Медианная цена</span><strong id="stat-median">—</strong><small>по выбранному сегменту</small></article>
+      <article><span>Новых за 7 дней</span><strong id="stat-new">—</strong><small id="stat-new-30">— за 30 дней</small></article>
+      <article><span>Снижений цены</span><strong id="stat-reductions">—</strong><small id="stat-days">— дней наблюдения</small></article>
+    </section>
+
+    <section class="analytics-panel watchlist-history">
+      <div class="watchlist-head">
+        <div><p class="eyebrow">Market watchlists</p><h2>Динамика выбранного сегмента</h2><p class="section-hint">Новый снимок сохраняется после каждого успешного запуска поиска Otomoto.</p></div>
+        <label>Сегмент<select id="snapshot-source"><option value="">Выберите поиск</option></select></label>
+      </div>
+      <div id="snapshot-summary" class="snapshot-summary"></div>
+      <div id="snapshot-chart" class="snapshot-chart"><div class="market-empty">Запустите один из существующих поисков Otomoto, чтобы создать первый снимок.</div></div>
+      <div class="snapshot-legend"><span><i class="volume"></i>Объявления</span><span><i class="price"></i>Медианная цена</span></div>
+    </section>
+
+    <section class="analytics-panel variant-intelligence">
+      <div class="market-section-head"><p class="eyebrow">Vehicle Variant Intelligence</p><h2>Версии выбранной модели</h2><p class="section-hint">Выберите марку и модель. DealerMind разделит цены по поколению, кузову, двигателю, мощности, приводу и комплектации.</p></div>
+      <div id="variant-stats" class="variant-grid"><div class="market-empty">Выберите марку и модель в фильтрах.</div></div>
+    </section>
+
+    <section class="analytics-grid">
+      <article class="analytics-panel distribution-panel">
+        <div class="market-section-head"><p class="eyebrow">Price distribution</p><h2>Распределение цен</h2></div>
+        <div id="price-distribution" class="bar-chart"><div class="market-empty">Загружаем данные…</div></div>
+      </article>
+      <article class="analytics-panel">
+        <div class="market-section-head"><p class="eyebrow">Seller mix</p><h2>Тип продавца</h2></div>
+        <div id="seller-stats" class="compact-stats"></div>
+      </article>
+    </section>
+
+    <section class="analytics-panel section-space">
+      <div class="market-section-head"><p class="eyebrow">Geography</p><h2>Воеводства</h2></div>
+      <div id="region-stats" class="region-grid"></div>
+    </section>
+
+    <section class="section-space">
+      <div class="market-section-head"><p class="eyebrow">Price position</p><h2>Положение объявлений относительно рынка</h2><p class="section-hint">Низкий процентиль означает, что автомобиль дешевле большинства сопоставимых объявлений.</p></div>
+      <div id="listing-positions" class="market-table"></div>
+    </section>
+
+    <section class="section-space">
+      <div class="market-section-head"><p class="eyebrow">Price history</p><h2>Последние снижения цены</h2></div>
+      <div id="price-history" class="market-table"></div>
+    </section>
+
+    <details class="legacy-analytics section-space">
+      <summary>История оценок и сборов аналогов</summary>
+      <section><div class="market-section-head"><h2>История оценок</h2></div><div id="valuation-history" class="market-table"></div></section>
+      <section class="collection-section"><div class="market-section-head"><h2>Сборы аналогов</h2></div><div id="collection-history" class="collection-history"></div></section>
+    </details>
+  </main>
+  <script src="/assets/market.js" defer></script>
+</body>
+</html>
