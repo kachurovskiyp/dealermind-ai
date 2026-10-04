@@ -1,0 +1,44 @@
+.section-intro { max-width: 720px; color: var(--muted); font-size: 12px; line-height: 1.55; }
+.model-image { margin: 20px 0 18px; overflow: hidden; border-radius: 14px; background: #f4f6f0; }
+.model-image img { display: block; width: 100%; height: auto; object-fit: cover; object-position: center; }
+.model-image figcaption { display: flex; justify-content: space-between; gap: 16px; padding: 10px 13px; color: var(--muted); font-size: 10px; }
+.model-image figcaption small { text-align: right; }
+.model-image a { color: inherit; }
+.dealer-config-grid { display: grid; gap: 9px; }
+.dealer-config { padding: 15px; border: 1px solid var(--line); border-left: 4px solid #8b9098; border-radius: 11px; }
+.dealer-config.consider { border-left-color: var(--green); background: #f4f8ef; }
+.dealer-config.inspect { border-left-color: var(--amber); background: #fffaf0; }
+.dealer-config.skip { border-left-color: #b84a3a; background: #fff2ef; }
+.dealer-config > header { display: flex; justify-content: space-between; gap: 12px; }
+.dealer-config > header strong, .dealer-config > header small { display: block; }
+.dealer-config > header small { margin-top: 4px; color: var(--muted); font-size: 9px; }
+.dealer-config > header > span { align-self: start; padding: 5px 8px; border-radius: 999px; background: #fff; font-size: 9px; font-weight: 850; }
+.dealer-reasons { margin: 11px 0; padding-left: 18px; }
+.dealer-reasons li, .dealer-config details li { margin: 5px 0; color: var(--muted); font-size: 11px; line-height: 1.45; }
+.dealer-config details summary { cursor: pointer; font-size: 11px; font-weight: 800; }
+.reject-column strong { color: #9c3525; }
+.gearbox-grid, .issue-list { display: grid; grid-template-columns: 1fr 1fr; gap: 9px; }
+.gearbox-grid > article, .issue { padding: 15px; border: 1px solid var(--line); border-radius: 11px; }
+.gearbox-grid > article > div, .issue > div { display: flex; justify-content: space-between; gap: 10px; }
+.gearbox-grid p, .gearbox-grid small, .issue p, .issue details small { color: var(--muted); font-size: 11px; line-height: 1.5; }
+.gearbox-grid details summary, .issue details summary { cursor: pointer; font-weight: 750; font-size: 11px; }
+.evidence-state, .issue-kind { display: inline-block; padding: 4px 7px; border-radius: 999px; background: #f4f6f0; color: var(--muted); font-size: 9px; font-weight: 800; }
+.issue { border-left: 4px solid var(--amber); }
+.issue.confirmed_model_level { border-left-color: var(--green); }
+.severity { padding: 4px 7px; border-radius: 999px; background: #fff0ce; color: #815b15; font-size: 9px; font-weight: 850; }
+.severity.high { background: #ffe2dc; color: #9c3525; }
+.evidence-meter { display: grid; grid-template-columns: 1fr auto; gap: 3px 12px; margin: 0 0 11px; padding: 9px; border-radius: 8px; background: #edf4e7; }
+.evidence-meter span, .evidence-meter small { font-size: 9px; color: var(--muted); }
+.evidence-meter strong { font-size: 10px; color: var(--green); }
+.evidence-meter small { grid-column: 1/-1; }
+.liquidity-table { overflow: auto; border: 1px solid var(--line); border-radius: 11px; }
+.liquidity-head, .liquidity-row { display: grid; grid-template-columns: 1.6fr .8fr 1fr .8fr .7fr 1fr; gap: 10px; align-items: center; min-width: 820px; padding: 11px 13px; }
+.liquidity-head { background: #f4f6f0; color: var(--muted); font-size: 9px; font-weight: 850; text-transform: uppercase; }
+.liquidity-row { border-top: 1px solid var(--line); font-size: 11px; }
+.liquidity-row small { display: block; color: var(--muted); }
+.liquidity-row .confidence { display: inline-block; margin-top: 4px; padding: 3px 5px; border-radius: 99px; background: #f4f6f0; color: var(--muted); font-size: 8px; font-style: normal; }
+.liquidity-row .confidence.high { background: #e3f4d0; color: var(--green); }
+.market-loading, .market-disclaimer { color: var(--muted); font-size: 11px; }
+.knowledge-empty.compact { padding: 24px; }
+.market-disclaimer { margin-top: 9px; }
+@media (max-width: 760px) { .gearbox-grid, .issue-list { grid-template-columns: 1fr; } .model-image figcaption { display: block; } .model-image figcaption small { display: block; margin-top: 4px; text-align: left; } }

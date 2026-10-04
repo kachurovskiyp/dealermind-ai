@@ -1,4 +1,4 @@
-from app.models.automation import ImportRun, ImportSource, MarketSegmentSnapshot
+from app.models.automation import ImportRun, ImportSource, MarketSegmentSnapshot, PolandFleetSnapshot
 from app.models.domain import (
     Acquisition,
     ComparableCollection,
@@ -32,6 +32,7 @@ __all__ = [
     "ImportSource",
     "Market",
     "MarketSegmentSnapshot",
+    "PolandFleetSnapshot",
     "Marketplace",
     "Offer",
     "Opportunity",

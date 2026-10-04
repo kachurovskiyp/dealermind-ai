@@ -329,3 +329,70 @@ def model_variant_analytics(
             }
         )
     return sorted(result, key=lambda item: int(item["sample_size"]), reverse=True)
+
+
+def _configuration_name(offer: Offer) -> tuple[str, str, str]:
+    engine = (offer.vehicle.engine_marketing_name or "Двигатель не определён").strip()
+    gearbox = (offer.vehicle.gearbox or "Коробка не определена").strip()
+    return f"{engine} · {gearbox}", engine, gearbox
+
+
+def configuration_liquidity_from_offers(
+    offers: list[Offer], now: datetime | None = None
+) -> list[dict[str, object]]:
+    """Build explainable market signals; disappearance is deliberately not called a sale."""
+    now = now or datetime.now(UTC)
+    groups: dict[tuple[str, str, str], list[tuple[Offer, Decimal]]] = defaultdict(list)
+    for offer in offers:
+        price = _latest_price(offer)
+        if price is not None:
+            groups[_configuration_name(offer)].append((offer, price))
+
+    result: list[dict[str, object]] = []
+    for (configuration, engine, gearbox), items in groups.items():
+        sample_size = len(items)
+        active_items = [offer for offer, _ in items if offer.status is OfferStatus.ACTIVE]
+        reductions = 0
+        for offer, _ in items:
+            observations = sorted(
+                (item for item in offer.prices if item.currency == Currency.PLN),
+                key=lambda item: item.observed_at,
+            )
+            if any(
+                current.amount < previous.amount
+                for previous, current in zip(observations, observations[1:])
+            ):
+                reductions += 1
+        active_days = [max(0, (now - offer.first_seen_at).days) for offer in active_items]
+        disappeared = sample_size - len(active_items)
+        confidence = "high" if sample_size >= 12 else "medium" if sample_size >= 5 else "low"
+        result.append(
+            {
+                "configuration": configuration,
+                "engine": engine,
+                "gearbox": gearbox,
+                "sample_size": sample_size,
+                "active_listings": len(active_items),
+                "median_price": _money(median(price for _, price in items)),
+                "median_days_observed": round(median(active_days)) if active_days else None,
+                "price_reduction_rate": round(reductions / sample_size * 100, 1),
+                "disappearance_signal_rate": round(disappeared / sample_size * 100, 1),
+                "confidence": confidence,
+                "interpretation": (
+                    "Исчезновение объявления — только сигнал возможного оборота, не подтверждённая продажа."
+                ),
+            }
+        )
+    return sorted(result, key=lambda item: int(item["sample_size"]), reverse=True)
+
+
+def model_configuration_liquidity(
+    db: Session, make: str, model: str
+) -> list[dict[str, object]]:
+    offers = [
+        offer
+        for offer in _offers(db)
+        if _normalize(offer.vehicle.make) == _normalize(make)
+        and _normalize(offer.vehicle.model) == _normalize(model)
+    ]
+    return configuration_liquidity_from_offers(offers)

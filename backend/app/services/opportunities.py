@@ -16,7 +16,10 @@ from app.models.domain import (
     ScoreSnapshot,
 )
 from app.schemas.opportunity import DecisionCreate, OpportunityCreate, ScoreCalculate
+from app.services.dealer_knowledge import assess_dealer_configuration
+from app.services.vehicle_catalog import catalog_entry
 from app.services.ranking import rank_opportunity, ranking_label
+from app.services.poland_analytics import model_configuration_liquidity
 
 
 class InvalidOpportunityTransition(ValueError):
@@ -67,6 +70,7 @@ def opportunity_feed(db: Session) -> list[dict[str, object]]:
         .limit(100)
     ).all()
     feed: list[dict[str, object]] = []
+    liquidity_cache: dict[tuple[str, str], list[dict[str, object]]] = {}
     for opportunity in opportunities:
         latest_scores: dict[str, Decimal] = {}
         latest_by_kind: dict[str, ScoreSnapshot] = {}
@@ -97,6 +101,43 @@ def opportunity_feed(db: Session) -> list[dict[str, object]]:
                 for item in ranked_contributions
                 if item.get("explanation")
             ][:3]
+        vehicle = opportunity.offer.vehicle
+        assessment = assess_dealer_configuration(
+            make=vehicle.make,
+            model=vehicle.model,
+            generation=vehicle.generation,
+            engine=vehicle.engine_marketing_name,
+            gearbox=vehicle.gearbox,
+            power_hp=vehicle.power_hp,
+        )
+        if vehicle.engine_marketing_name and vehicle.gearbox:
+            market_key = (vehicle.make.casefold(), vehicle.model.casefold())
+            if market_key not in liquidity_cache:
+                liquidity_cache[market_key] = model_configuration_liquidity(
+                    db, vehicle.make, vehicle.model
+                )
+            signal = next(
+                (
+                    row
+                    for row in liquidity_cache[market_key]
+                    if str(row["engine"]).casefold()
+                    == vehicle.engine_marketing_name.casefold()
+                    and str(row["gearbox"]).casefold() == vehicle.gearbox.casefold()
+                ),
+                None,
+            )
+            if signal is not None:
+                assessment["market_signal"] = {
+                    key: signal[key]
+                    for key in (
+                        "sample_size",
+                        "active_listings",
+                        "median_days_observed",
+                        "price_reduction_rate",
+                        "disappearance_signal_rate",
+                        "confidence",
+                    )
+                }
         feed.append(
             {
                 **{
@@ -118,9 +159,11 @@ def opportunity_feed(db: Session) -> list[dict[str, object]]:
                 "vehicle_engine_marketing_name": (
                     opportunity.offer.vehicle.engine_marketing_name
                 ),
+                "vehicle_gearbox": opportunity.offer.vehicle.gearbox,
                 "vehicle_power_hp": opportunity.offer.vehicle.power_hp,
                 "vehicle_drivetrain": opportunity.offer.vehicle.drivetrain,
                 "vehicle_trim_line": opportunity.offer.vehicle.trim_line,
+                "catalog_tier": (catalog_entry(opportunity.offer.vehicle.make, opportunity.offer.vehicle.model) or {}).get("tier"),
                 "latest_scores": latest_scores,
                 "ranking_label": ranking_label(
                     ranking_snapshot.value if ranking_snapshot is not None else None
@@ -142,6 +185,7 @@ def opportunity_feed(db: Session) -> list[dict[str, object]]:
                     latest_collection.usable_count if latest_collection is not None else None
                 ),
                 "logistics": logistics,
+                "dealer_assessment": assessment,
             }
         )
     feed.sort(

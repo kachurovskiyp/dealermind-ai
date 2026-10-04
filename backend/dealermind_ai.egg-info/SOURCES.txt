@@ -1,20 +1,26 @@
 pyproject.toml
 app/__init__.py
+app/main 2.py
 app/main.py
 app/api/__init__.py
+app/api/router 2.py
 app/api/router.py
 app/api/routes/__init__.py
 app/api/routes/acquisitions.py
 app/api/routes/automation.py
+app/api/routes/catalog.py
+app/api/routes/fleet.py
 app/api/routes/health.py
 app/api/routes/imports.py
 app/api/routes/intake.py
+app/api/routes/knowledge.py
 app/api/routes/logistics.py
 app/api/routes/market_intelligence.py
 app/api/routes/markets.py
 app/api/routes/offers.py
 app/api/routes/opportunities.py
 app/api/routes/vehicles.py
+app/api/routes/vin.py
 app/core/__init__.py
 app/core/config.py
 app/core/configuration/features.yaml
@@ -36,19 +42,26 @@ app/models/domain.py
 app/schemas/__init__.py
 app/schemas/acquisition.py
 app/schemas/automation.py
+app/schemas/catalog.py
+app/schemas/fleet.py
 app/schemas/imports.py
 app/schemas/intake.py
+app/schemas/knowledge.py
 app/schemas/logistics.py
 app/schemas/market.py
 app/schemas/market_intelligence.py
 app/schemas/offer.py
 app/schemas/opportunity.py
 app/schemas/vehicle_event.py
+app/schemas/vin.py
 app/services/__init__.py
 app/services/acquisitions.py
 app/services/automation.py
 app/services/comparables.py
+app/services/dealer_knowledge.py
+app/services/fleet_intelligence.py
 app/services/imports.py
+app/services/knowledge.py
 app/services/logistics.py
 app/services/market_snapshots.py
 app/services/markets.py
@@ -58,16 +71,33 @@ app/services/poland_analytics.py
 app/services/ranking.py
 app/services/valuation.py
 app/services/variant_intelligence.py
+app/services/vehicle_catalog.py
+app/services/vin.py
+app/web/app 2.js
 app/web/app.js
 app/web/automation-demo.json
 app/web/automation.css
+app/web/catalog.css
+app/web/catalog.html
+app/web/catalog.js
+app/web/dealer-decision.css
+app/web/fleet.css
+app/web/fleet.html
+app/web/fleet.js
 app/web/import.css
+app/web/index 2.html
 app/web/index.html
+app/web/knowledge-intelligence.css
+app/web/knowledge.css
+app/web/knowledge.html
+app/web/knowledge.js
 app/web/listings-template.csv
+app/web/market 2.html
 app/web/market.css
 app/web/market.html
 app/web/market.js
 app/web/ranking.css
+app/web/styles 2.css
 app/web/styles.css
 dealermind_ai.egg-info/PKG-INFO
 dealermind_ai.egg-info/SOURCES.txt
@@ -78,7 +108,9 @@ tests/test_acquisition_lifecycle.py
 tests/test_automation.py
 tests/test_comparables.py
 tests/test_domain_core.py
+tests/test_fleet_intelligence.py
 tests/test_health.py
+tests/test_knowledge.py
 tests/test_link_intake.py
 tests/test_listing_providers.py
 tests/test_logistics.py
@@ -91,3 +123,4 @@ tests/test_score_snapshots.py
 tests/test_scoring.py
 tests/test_valuation.py
 tests/test_variant_intelligence.py
+tests/test_vin.py

@@ -163,3 +163,17 @@ class ModelVariantStatRead(BaseModel):
     premium_percent: float
     confidence: str
     specification_completeness: int
+
+
+class ConfigurationLiquidityRead(BaseModel):
+    configuration: str
+    engine: str
+    gearbox: str
+    sample_size: int
+    active_listings: int
+    median_price: Decimal
+    median_days_observed: int | None
+    price_reduction_rate: float
+    disappearance_signal_rate: float
+    confidence: str
+    interpretation: str

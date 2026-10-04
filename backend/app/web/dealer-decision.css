@@ -1,0 +1,16 @@
+.dealer-assessment { margin: 11px 0; padding: 12px 14px; border: 1px solid var(--line); border-left: 4px solid #9aa09a; border-radius: 10px; background: #fafbf8; }
+.dealer-assessment.consider { border-left-color: var(--green); background: #f0f7e9; }
+.dealer-assessment.inspect { border-left-color: var(--amber); background: #fff8e8; }
+.dealer-assessment.skip { border-left-color: #b84a3a; background: #fff0ed; }
+.dealer-assessment.needs_data, .dealer-assessment.unreviewed { border-left-color: #8b9098; }
+.dealer-assessment > div > span, .dealer-assessment > div > strong, .dealer-assessment > div > small { display: block; }
+.dealer-assessment > div > span { color: var(--muted); font-size: 9px; font-weight: 800; text-transform: uppercase; letter-spacing: .06em; }
+.dealer-assessment > div > strong { margin-top: 3px; font-size: 13px; }
+.dealer-assessment > div > small, .dealer-assessment p { margin-top: 4px; color: var(--muted); font-size: 10px; line-height: 1.45; }
+.dealer-assessment details { margin-top: 8px; border-top: 1px solid rgba(0,0,0,.08); padding-top: 8px; }
+.dealer-assessment summary { cursor: pointer; font-size: 10px; font-weight: 800; }
+.dealer-assessment details > div { margin-top: 8px; }
+.dealer-assessment ul { margin: 5px 0 0; padding-left: 17px; }
+.dealer-assessment li { margin: 4px 0; color: var(--muted); font-size: 10px; }
+.dealer-assessment .dealer-stop strong { color: #9c3525; }
+.dealer-assessment .dealer-market { padding: 7px 8px; border-radius: 7px; background: rgba(255,255,255,.72); font-weight: 700; }

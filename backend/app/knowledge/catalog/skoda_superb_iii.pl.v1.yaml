@@ -1,0 +1,103 @@
+slug: skoda-superb-iii-pl-v1
+make: Škoda
+model: Superb
+generation: III
+market_code: PL
+production_years: "2015–2023"
+version: knowledge.skoda-superb-iii.pl.v1
+verification_status: draft
+summary: Стартовая проверенная карта Superb III для закупки в Польше. Отчёт ADAC покрывает дизельные версии и подчёркивает важность реального пробега и состояния автомобиля для этой модели дальних поездок.
+body_types: [Liftback, Combi]
+powertrains:
+  - name: 1.6 TDI
+    fuel: diesel
+    transmissions: [manual, DSG]
+    verdict: caution
+    evidence_refs: [adac-superb-diesel]
+    review_note: ADAC считает 120-сильную версию достаточной, но не самой уверенной для крупного Superb; решение принимать после проверки нагрузки и истории.
+  - name: 2.0 TDI
+    fuel: diesel
+    transmissions: [manual, DSG]
+    drivetrains: [FWD, 4x4]
+    verdict: recommended
+    evidence_refs: [adac-superb-diesel]
+    review_note: ADAC рекомендует 2.0 TDI 150 л.с. и считает 190 л.с. вариантом с большим запасом тяги; всё равно проверять экологические системы и пробег.
+gearbox_profiles:
+  - name: DSG
+    variants: ["6-ступенчатая", "7-ступенчатая"]
+    identification_rule: Зафиксировать код коробки по VIN и наличие подтверждённого обслуживания.
+    suitable_for: Допустима для закупки после дорожной проверки, диагностики и проверки истории.
+    inspection_checks: [плавность трогания, переключения на холодную и после прогрева, режимы D/R, ошибки блока]
+    risk_signals: [рывки, задержки включения, аварийный режим, отсутствие истории]
+    evidence_refs: [adac-superb-diesel]
+    evidence_status: reviewed_with_limits
+known_issues:
+  - component: Пробег и следы интенсивной эксплуатации
+    applicability: Superb III в целом
+    classification: inspection_risk
+    severity: high
+    symptoms: [изношенный салон, люфты подвески, неравномерный износ шин, неполная история]
+    inspection: [сверка истории, осмотр на подъёмнике, диагностика электронных систем, оценка износа салона]
+    evidence_refs: [adac-superb-diesel]
+    note: ADAC описывает Superb как автомобиль, часто используемый для дальних поездок; поэтому фактический пробег и обслуживание важнее среднего ожидания от модели.
+dealer_configurations:
+  - id: 20-tdi-150
+    label: 2.0 TDI 150 · механика или DSG
+    engine_patterns: [2.0 TDI]
+    gearbox_patterns: []
+    power_hp: [150]
+    verdict: consider
+    confidence: medium
+    dealer_rationale: [ADAC рекомендует 150-сильный 2.0 TDI как подходящий для Superb]
+    required_checks: [DPF/SCR, турбина, пробег, история обслуживания, коробка при DSG]
+    reject_if: [удалённая экология, критические ошибки двигателя или коробки, нет подтверждаемой истории]
+  - id: 20-tdi-190
+    label: 2.0 TDI 190 · механика или DSG
+    engine_patterns: [2.0 TDI]
+    gearbox_patterns: []
+    power_hp: [190]
+    verdict: consider
+    confidence: medium
+    dealer_rationale: [ADAC отмечает 190 л.с. как версию с большим запасом мощности]
+    required_checks: [DPF/SCR, трансмиссия, пробег, история обслуживания]
+    reject_if: [следы отключения экологических систем, проблемы трансмиссии, нет истории]
+  - id: 16-tdi
+    label: 1.6 TDI 120 · механика или DSG
+    engine_patterns: [1.6 TDI]
+    gearbox_patterns: []
+    power_hp: [120]
+    verdict: inspect
+    confidence: medium
+    dealer_rationale: [Версия допустима, но для тяжёлого автомобиля требует особенно честной оценки состояния и спроса]
+    required_checks: [проверка нагрузки на тест-драйве, DPF/SCR, история, коробка]
+    reject_if: [нет истории, ошибки экологии, недостаточная тяга на тесте]
+factory_lines:
+  - name: Active
+    positioning: Базовая
+    equipment_notes: [Оценивать только при понятной цене и подтверждённых опциях]
+  - name: Ambition
+    positioning: Средняя
+    equipment_notes: [ADAC рекомендует ориентироваться как минимум на эту линию]
+  - name: Style
+    positioning: Верхняя
+    equipment_notes: [Сверять дорогие опции по VIN и их работоспособность]
+  - name: Laurin & Klement
+    positioning: Флагманская
+    equipment_notes: [Проверять полный набор электроники и соответствие комплектации]
+equipment_groups:
+  - name: Кузов
+    values: [Liftback, Combi]
+    note: Combi обычно ориентирован на практичность и может иметь следы более интенсивной эксплуатации.
+  - name: Линия оснащения
+    values: [Active, Ambition, Style, "Laurin & Klement"]
+    note: Линию и фактические опции проверять по VIN.
+decision_notes: [Для Superb критично подтверждение пробега и обслуживания, Не оценивать DSG без диагностики и тест-драйва, Дизельные системы DPF/SCR проверять до расчёта прибыли]
+sources:
+  - id: adac-superb-diesel
+    title: ADAC Gebrauchtwageninfo — Škoda Superb seit 2015 Diesel
+    url: "https://assets.adac.de/image/upload/w_120/Autodatenbank/GWInfo/gw0404-skoda-superb-seit-2015-diesel-bericht.pdf"
+    source_type: independent_statistics
+    trust_level: B
+    checked_at: "2026-10-04"
+    scope: Дизельные Superb III, рекомендации по мощности, оснащению и особенностям эксплуатации.
+    limitation: Не покрывает бензиновые и гибридные версии; не заменяет диагностику конкретного автомобиля.

@@ -6,6 +6,7 @@ from pydantic import BaseModel, ConfigDict, Field
 
 from app.models.domain import Currency, DecisionType, OpportunityStatus, ScoreKind
 from app.schemas.logistics import LogisticsSnapshotRead
+from app.schemas.knowledge import DealerAssessmentRead
 
 
 class OpportunityCreate(BaseModel):
@@ -113,9 +114,11 @@ class OpportunityFeedItem(OpportunityRead):
     vehicle_generation: str | None
     vehicle_body_type: str | None
     vehicle_engine_marketing_name: str | None
+    vehicle_gearbox: str | None
     vehicle_power_hp: int | None
     vehicle_drivetrain: str | None
     vehicle_trim_line: str | None
+    catalog_tier: str | None = None
     latest_scores: dict[str, Decimal]
     ranking_label: str
     ranking_reasons: list[str]
@@ -125,3 +128,4 @@ class OpportunityFeedItem(OpportunityRead):
     latest_collection_status: str | None
     latest_collection_usable_count: int | None
     logistics: LogisticsSnapshotRead | None
+    dealer_assessment: DealerAssessmentRead

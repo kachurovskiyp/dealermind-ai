@@ -15,6 +15,7 @@ from app.models.domain import (
 )
 from app.schemas.market_intelligence import (
     CollectionHistoryRead,
+    ConfigurationLiquidityRead,
     ComparableListingRead,
     MarketOverviewRead,
     MarketSegmentSnapshotRead,
@@ -23,9 +24,25 @@ from app.schemas.market_intelligence import (
     ValuationHistoryRead,
 )
 from app.services.market_snapshots import list_market_snapshots
-from app.services.poland_analytics import model_variant_analytics, poland_market_analytics
+from app.services.poland_analytics import (
+    model_configuration_liquidity,
+    model_variant_analytics,
+    poland_market_analytics,
+)
 
 router = APIRouter(prefix="/market-intelligence", tags=["market intelligence"])
+
+
+@router.get("/poland/configurations", response_model=list[ConfigurationLiquidityRead])
+def poland_configurations(
+    make: str,
+    model: str,
+    db: Session = Depends(get_db),
+) -> list[ConfigurationLiquidityRead]:
+    return [
+        ConfigurationLiquidityRead.model_validate(item)
+        for item in model_configuration_liquidity(db, make, model)
+    ]
 
 
 @router.get("/poland/variants", response_model=list[ModelVariantStatRead])

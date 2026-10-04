@@ -1,0 +1,24 @@
+slug: skoda-octavia-iii-pl-v1
+make: Škoda
+model: Octavia
+generation: III
+market_code: PL
+production_years: "2013–2020"
+version: knowledge.skoda-octavia-iii.pl.v1
+verification_status: draft
+summary: Проверенная стартовая карта Octavia III; точный двигатель, коробку и кузов необходимо подтверждать до решения.
+body_types: [liftback, Combi, Scout, RS]
+powertrains:
+  - {name: 1.4 TSI, fuel: petrol, transmissions: [manual, DSG], verdict: recommended, evidence_refs: [adac-octavia-petrol], review_note: ADAC выделяет 1.4/1.5 TSI, особенно 150 л.с., как баланс мощности и расхода.}
+  - {name: 1.5 TSI, fuel: petrol, transmissions: [manual, DSG], verdict: recommended, evidence_refs: [adac-octavia-petrol], review_note: Подтвердить точный код и обслуживание.}
+  - {name: 1.6 TDI, fuel: diesel, transmissions: [manual, DSG], verdict: caution, evidence_refs: [adac-octavia-diesel], review_note: Проверять DPF/EGR и характер эксплуатации.}
+  - {name: 2.0 TDI, fuel: diesel, transmissions: [manual, DSG], drivetrains: [FWD, 4x4], verdict: recommended, evidence_refs: [adac-octavia-diesel], review_note: ADAC рекомендует 150-сильную версию как трассовую и распространённую на вторичном рынке.}
+gearbox_profiles: [{name: DSG, variants: [6-ступенчатая, 7-ступенчатая], identification_rule: Определить код коробки, suitable_for: Только с историей обслуживания, inspection_checks: [плавность старта, D/R, ошибки блока], risk_signals: [рывки, задержки, аварийный режим], evidence_refs: [adac-octavia-petrol, adac-octavia-diesel], evidence_status: reviewed_with_limits}]
+known_issues: [{component: Пружины подвески, applicability: Octavia III в целом, classification: confirmed_model_level, severity: medium, symptoms: [стук, разная высота кузова], inspection: [осмотр нижних витков на подъёмнике], evidence_refs: [adac-octavia-petrol, adac-octavia-diesel], note: ADAC отмечает проблему на уровне модели.}]
+dealer_configurations: [{id: 14-tsi-manual, label: 1.4 TSI · механика, engine_patterns: [1.4 TSI], gearbox_patterns: [manual, механ], power_hp: [140, 150], verdict: consider, confidence: medium, dealer_rationale: [Сбалансированная бензиновая конфигурация по ADAC], required_checks: [код двигателя, охлаждение, расход масла, сцепление], reject_if: [расход масла без объяснения, отказ от диагностики]}, {id: 20-tdi-manual, label: 2.0 TDI 150 · механика, engine_patterns: [2.0 TDI], gearbox_patterns: [manual, механ], power_hp: [150], verdict: consider, confidence: medium, dealer_rationale: [Распространённая трассовая конфигурация], required_checks: [DPF/EGR, турбина, форсунки, маховик], reject_if: [удалённая экология, дымность]}]
+factory_lines: [{name: Active, positioning: Базовая линия, equipment_notes: [Сверять климат и ассистенты по VIN]}, {name: Ambition, positioning: Средняя линия, equipment_notes: [Проверять фактические опции]}, {name: Style, positioning: Верхняя линия, equipment_notes: [Не оценивать по шильдикам]}]
+equipment_groups: [{name: Кузов, values: [liftback, Combi, Scout, RS], note: не смешивать в оценке}]
+decision_notes: [Проверять точную экологическую систему и историю обслуживания, Не переносить вывод по DSG на все коробки]
+sources:
+  - {id: adac-octavia-petrol, title: ADAC Gebrauchtwageninfo — Škoda Octavia 2013–2020 Benziner, url: "https://assets.adac.de/image/upload/w_120/Autodatenbank/GWInfo/gw0242-skoda-octavia-2013-2020-benziner-bericht.pdf", source_type: independent_statistics, trust_level: B, checked_at: "2026-10-04", scope: Бензиновые версии и модельные риски, limitation: Не заменяет проверку кода двигателя.}
+  - {id: adac-octavia-diesel, title: ADAC Gebrauchtwageninfo — Škoda Octavia 2013–2020 Diesel, url: "https://assets.adac.de/Autodatenbank/GWInfo/gw0235-skoda-octavia-2013-2020-diesel-bericht.pdf", source_type: independent_statistics, trust_level: B, checked_at: "2026-10-04", scope: Дизельные версии и рекомендации, limitation: Не содержит истории конкретного автомобиля.}

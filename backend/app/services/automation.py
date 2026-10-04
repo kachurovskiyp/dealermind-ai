@@ -17,6 +17,7 @@ from app.schemas.automation import ImportSourceCreate, ImportSourceUpdate
 from app.schemas.imports import ListingImportBatch
 from app.services.imports import import_listings
 from app.services.market_snapshots import create_market_snapshot
+from app.services.fleet_intelligence import collect_due_snapshots
 
 logger = logging.getLogger(__name__)
 
@@ -201,6 +202,8 @@ async def scheduler_loop(stop: asyncio.Event) -> None:
                 if stop.is_set():
                     break
                 await execute_source(source_id, trigger="schedule")
+            if not stop.is_set():
+                await asyncio.to_thread(collect_due_snapshots)
         except Exception:
             logger.exception("scheduled import cycle failed")
         try:

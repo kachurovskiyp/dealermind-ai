@@ -1,0 +1,315 @@
+slug: audi-a3-8v-pl-v1
+make: Audi
+model: A3
+generation: 8V
+market_code: PL
+production_years: "2012–2020"
+version: knowledge.audi-a3-8v.pl.v5
+verification_status: draft
+fleet_monitor:
+  enabled: true
+  configuration_version: cepik-registration-observation-v1
+summary: >-
+  Пилотная карта поколения Audi A3 8V. Линейка менялась по годам и кузовам;
+  перед покупкой конкретного автомобиля конфигурацию необходимо сверить по VIN.
+image:
+  url: https://audi-mediacenter.pl/data/galerie/875/b/A161803_large.jpg
+  alt: Красный Audi A3 Sportback 8V 2016 года, студийный ракурс три четверти
+  caption: Audi A3 Sportback 8V, рестайлинг 2016 года · изображение A161803
+  author: AUDI AG
+  source_url: https://audi-mediacenter.pl/galeria%2C875%2Caudi-a3-sportback.html
+  license: Для частных и редакционных целей
+  license_url: https://www.audi-mediacenter.com/en/terms-of-use-11542
+body_types: [3-door, Sportback, Sedan, Cabriolet]
+powertrains:
+  - {name: 1.0 TFSI, fuel: petrol, transmissions: [manual, S tronic], verdict: unreviewed, evidence_refs: [adac-a3-petrol], review_note: Заводское наличие подтверждено; надёжность конкретного кода ещё не оценена.}
+  - {name: 1.2 TFSI, fuel: petrol, transmissions: [manual, S tronic], verdict: unreviewed, evidence_refs: [adac-a3-petrol], review_note: Нужны код двигателя и данные ремонтов.}
+  - name: 1.4 TFSI / COD
+    fuel: petrol
+    transmissions: [manual, S tronic]
+    verdict: recommended
+    evidence_refs: [adac-a3-petrol, audi-erwin]
+    review_note: ADAC выделяет 1.4 TFSI COD как удачный компромисс расхода и динамики; вердикт действует только после подтверждения кода двигателя и обслуживания.
+    deep_dive:
+      outputs_hp: [122, 125, 140, 150]
+      market_role: Массовый бензиновый вариант; COD ориентирован на снижение расхода при частичной нагрузке.
+      suitable_for: Город и смешанный режим при подтверждённом обслуживании.
+      inspection_checks: [точный код двигателя по VIN, холодный запуск, равномерность работы, расход масла между заменами, герметичность системы охлаждения, история обслуживания S tronic]
+      risk_signals: [неподтверждённый код двигателя, заметный расход масла, рывки коробки, ошибки пропусков зажигания или системы отключения цилиндров]
+      evidence_status: reviewed
+      evidence_confidence: medium
+      decision_rule: Рекомендуется при подтверждённом коде двигателя, отсутствии расхода масла и прозрачной истории; не давать общий вердикт всему 1.4 TFSI без установления COD.
+  - {name: 1.5 TFSI COD, fuel: petrol, transmissions: [manual, S tronic], verdict: unreviewed, evidence_refs: [adac-a3-petrol], review_note: Нужны данные по коду двигателя и году выпуска.}
+  - name: 1.8 TFSI
+    fuel: petrol
+    transmissions: [S tronic]
+    drivetrains: [FWD, quattro]
+    verdict: caution
+    evidence_refs: [adac-a3-petrol, audi-erwin]
+    review_note: ADAC подтверждает более узкое и дорогое позиционирование 1.8 TFSI; по надёжности конкретного агрегата вердикт возможен только после диагностики двигателя и S tronic.
+    deep_dive:
+      outputs_hp: [180]
+      market_role: Динамичная версия между массовыми TFSI и S3.
+      suitable_for: Покупатель, которому важна динамика и который принимает более дорогую диагностику.
+      inspection_checks: [код двигателя и коробки по VIN, документированный расход масла, состояние охлаждения, холодный и горячий запуск, диагностика S tronic, подтверждение обслуживания quattro]
+      risk_signals: [нет истории обслуживания, долив масла без учёта, рывки или задержка включения передачи, следы тюнинга]
+      evidence_status: reviewed_with_limits
+      evidence_confidence: medium
+      decision_rule: Рассматривать только после профильной диагностики двигателя и трансмиссии; источник подтверждает позиционирование, но не заменяет проверку конкретного кода агрегата.
+  - {name: 2.0 TFSI, fuel: petrol, transmissions: [S tronic], drivetrains: [FWD, quattro], verdict: unreviewed, evidence_refs: [adac-a3-petrol], review_note: Не объединять стандартную версию с S3.}
+  - name: 1.6 TDI
+    fuel: diesel
+    transmissions: [manual, S tronic]
+    verdict: caution
+    evidence_refs: [adac-a3-diesel, audi-erwin]
+    review_note: ADAC подтверждает пригодность базовых 1.6 TDI для повседневной эксплуатации; для дилера решающим остаётся режим прошлой эксплуатации и состояние выхлопной системы.
+    deep_dive:
+      outputs_hp: [105, 110, 116]
+      market_role: Экономичный дизель для больших пробегов.
+      suitable_for: Регулярные загородные поездки и подтверждённые длинные пробеги.
+      inspection_checks: [код двигателя и экологическая версия, загрузка и история регенераций DPF, коррекции форсунок, работа EGR, холодный запуск, двухмассовый маховик или S tronic]
+      risk_signals: [преимущественно короткие городские поездки, удалённый DPF или EGR, частые незавершённые регенерации, дымность, отсутствие истории ремня ГРМ]
+      evidence_status: reviewed_with_limits
+      evidence_confidence: medium
+      decision_rule: Рассматривать только при трассовом сценарии и подтверждённой диагностике DPF/EGR; не рекомендовать для коротких городских поездок без отдельной проверки.
+  - name: 2.0 TDI
+    fuel: diesel
+    transmissions: [manual, S tronic]
+    drivetrains: [FWD, quattro]
+    verdict: recommended
+    evidence_refs: [adac-a3-diesel, audi-erwin]
+    review_note: ADAC называет 2.0 TDI мощностью 150 л.с. «золотой серединой» линейки; дилерский вердикт не распространяется автоматически на иной код мотора, коробку или экологическую систему.
+    deep_dive:
+      outputs_hp: [150, 184]
+      market_role: Более мощный дизель для трассы; доступен в нескольких сочетаниях трансмиссии и привода.
+      suitable_for: Большие годовые пробеги и трасса при прозрачной сервисной истории.
+      inspection_checks: [точная мощность и код двигателя, DPF и EGR, система SCR или NOx по конкретному году, коррекции форсунок, турбонаддув, двухмассовый маховик, S tronic и quattro]
+      risk_signals: [ошибки выхлопной системы, удалённые компоненты экологии, свист или недодув турбины, вибрации маховика, неподтверждённое обслуживание коробки]
+      evidence_status: reviewed
+      evidence_confidence: medium
+      decision_rule: Рекомендуется для трассового автомобиля при прозрачной истории и полной диагностике DPF/EGR/SCR, турбины и трансмиссии до расчёта прибыли.
+  - {name: S3 2.0 TFSI, fuel: petrol, transmissions: [manual, S tronic], drivetrains: [quattro], verdict: unreviewed, performance: true, evidence_refs: [adac-a3-petrol], review_note: Самостоятельная performance-модель, не пакет S line.}
+  - {name: RS 3 2.5 TFSI, fuel: petrol, transmissions: [S tronic], drivetrains: [quattro], verdict: unreviewed, performance: true, evidence_refs: [audi-erwin], review_note: Требует отдельной карты владения и ремонта.}
+gearbox_profiles:
+  - name: Механическая коробка
+    variants: [5-ступенчатая, 6-ступенчатая]
+    identification_rule: Число передач и код коробки подтвердить по VIN или заводской наклейке данных.
+    suitable_for: Покупатель, которому важны понятная диагностика и прямой контроль трансмиссии.
+    inspection_checks: [сцепление под нагрузкой, двухмассовый маховик, шум подшипников, чёткость включения передач, утечки]
+    risk_signals: [пробуксовка сцепления, вибрация при запуске и остановке, гул, затруднённое включение]
+    evidence_refs: [audi-erwin, adac-a3-petrol, adac-a3-diesel]
+    evidence_status: partial
+  - name: S tronic
+    variants: [6-ступенчатая, 7-ступенчатая]
+    identification_rule: Нельзя оценивать только по названию S tronic — сначала определить код коробки, число передач и сочетание с двигателем/приводом.
+    suitable_for: Покупатель, ценящий комфорт и быстрые переключения при подтверждённой истории обслуживания.
+    inspection_checks: [код коробки, ошибки блока управления, плавность старта, задержка D/R, поведение холодной и прогретой коробки, документы обслуживания]
+    risk_signals: [рывки, вибрация при старте, задержка включения, аварийный режим, неподтверждённое обслуживание]
+    evidence_refs: [audi-erwin]
+    evidence_status: identification_required
+known_issues:
+  - component: Тормозные диски
+    applicability: Audi A3 8V в целом по данным осмотров ADAC/TÜV
+    classification: confirmed_model_level
+    severity: medium
+    symptoms: [вибрация при торможении, выраженный буртик, неравномерный износ]
+    inspection: [измерить остаточную толщину, проверить биение, осмотреть внутреннюю поверхность]
+    evidence_refs: [adac-a3-petrol, adac-a3-diesel]
+    note: Это наблюдение уровня модели, а не конкретного двигателя.
+  - component: Пружины подвески
+    applicability: Audi A3 8V в целом по данным осмотров ADAC/TÜV
+    classification: confirmed_model_level
+    severity: medium
+    symptoms: [разная высота сторон, стук, облом нижнего витка]
+    inspection: [осмотреть нижние витки спереди и сзади, сравнить высоту кузова]
+    evidence_refs: [adac-a3-petrol, adac-a3-diesel]
+    note: Проверять визуально на подъёмнике; частоту по конкретной версии источник не разделяет.
+  - component: Дизельная система DPF/EGR
+    applicability: 1.6 TDI и 2.0 TDI, особенно автомобили с короткими городскими поездками
+    classification: inspection_risk
+    severity: high
+    symptoms: [частые регенерации, ошибки выхлопной системы, дымность, нестабильная работа]
+    inspection: [диагностика загрузки DPF, история регенераций, проверка EGR, проверка на удалённые компоненты]
+    evidence_refs: [audi-erwin, adac-a3-diesel]
+    note: Это сценарий обязательной проверки, а не утверждение, что неисправность есть у каждого автомобиля.
+  - component: S tronic
+    applicability: Все версии S tronic до установления точного кода коробки
+    classification: identification_risk
+    severity: high
+    symptoms: [рывки, вибрация, задержка включения D или R, аварийный режим]
+    inspection: [определить код коробки, прочитать ошибки, тестировать холодной и прогретой, проверить историю обслуживания]
+    evidence_refs: [audi-erwin]
+    note: Репутацию одной версии коробки нельзя переносить на все S tronic.
+dealer_configurations:
+  - id: 14-tfsi-manual
+    label: 1.4 TFSI / COD · механика
+    engine_patterns: [1.4 TFSI, 1.4 TFSI COD, 1.4 TFSI / COD]
+    gearbox_patterns: [manual, механ]
+    power_hp: [122, 125, 140, 150]
+    verdict: consider
+    confidence: medium
+    dealer_rationale:
+      - Массовая бензиновая конфигурация с понятным позиционированием на польском рынке.
+      - Механика упрощает первичную идентификацию по сравнению с неопределённой S tronic.
+      - Версия COD и точный код двигателя всё равно должны быть установлены до покупки.
+    required_checks: [код двигателя и наличие COD, холодный запуск, расход масла, система охлаждения, сцепление и двухмассовый маховик, ошибки двигателя]
+    reject_if: [заметный расход масла без подтверждённой причины, пропуски зажигания, шум или вибрация маховика, неподтверждённая модификация двигателя]
+  - id: 14-tfsi-stronic
+    label: 1.4 TFSI / COD · S tronic
+    engine_patterns: [1.4 TFSI, 1.4 TFSI COD, 1.4 TFSI / COD]
+    gearbox_patterns: [S tronic, automatic, automat, DSG]
+    power_hp: [122, 125, 140, 150]
+    verdict: inspect
+    confidence: medium
+    dealer_rationale:
+      - Автомат повышает привлекательность объявления, но общего названия S tronic недостаточно для оценки.
+      - Покупку можно рассматривать только после определения кода коробки и полноценного теста.
+    required_checks: [код двигателя, код и число передач коробки, холодный и горячий тест S tronic, задержка D/R, ошибки блока коробки, подтверждение обслуживания]
+    reject_if: [рывки или вибрация при старте, задержка включения D/R, аварийный режим, следы тюнинга, продавец не разрешает диагностику]
+  - id: 16-tdi-manual
+    label: 1.6 TDI · механика
+    engine_patterns: [1.6 TDI]
+    gearbox_patterns: [manual, механ]
+    power_hp: [105, 110, 116]
+    verdict: inspect
+    confidence: medium
+    dealer_rationale:
+      - Экономичная конфигурация может быть ликвидной, если история соответствует трассовой эксплуатации.
+      - Городская эксплуатация повышает неопределённость состояния DPF и EGR.
+    required_checks: [загрузка и регенерации DPF, работа EGR, коррекции форсунок, холодный запуск, дымность, ремень ГРМ, сцепление и маховик]
+    reject_if: [удалённый DPF или EGR, частые незавершённые регенерации, дымность, плохие коррекции форсунок, нет истории ГРМ]
+  - id: 16-tdi-stronic
+    label: 1.6 TDI · S tronic
+    engine_patterns: [1.6 TDI]
+    gearbox_patterns: [S tronic, automatic, automat, DSG]
+    power_hp: [105, 110, 116]
+    verdict: inspect
+    confidence: medium
+    dealer_rationale:
+      - Сочетает дизельную экологическую систему и коробку, требующую точной идентификации.
+      - При неполной истории риск сложнее объяснить следующему покупателю.
+    required_checks: [DPF и EGR, коррекции форсунок, код коробки, холодный и горячий тест S tronic, ошибки трансмиссии, история обслуживания]
+    reject_if: [удалённая экология, аварийный режим, рывки коробки, неподтверждённое обслуживание, продавец не разрешает диагностику]
+  - id: 20-tdi-manual
+    label: 2.0 TDI · механика
+    engine_patterns: [2.0 TDI]
+    gearbox_patterns: [manual, механ]
+    power_hp: [150, 184]
+    verdict: consider
+    confidence: medium
+    dealer_rationale:
+      - Сильное и понятное позиционирование для трассы; версии по мощности нельзя объединять при сравнении цен.
+      - Механика исключает неопределённость типа S tronic, но требует проверки маховика и сцепления.
+    required_checks: [точная мощность и код двигателя, DPF/EGR/SCR по году, турбонаддув, форсунки, сцепление и маховик, ошибки двигателя]
+    reject_if: [удалённая экология, ошибки SCR или NOx без диагноза, недодув турбины, сильная вибрация маховика, следы тяжёлого тюнинга]
+  - id: 20-tdi-stronic
+    label: 2.0 TDI · S tronic
+    engine_patterns: [2.0 TDI]
+    gearbox_patterns: [S tronic, automatic, automat, DSG]
+    power_hp: [150, 184]
+    verdict: inspect
+    confidence: medium
+    dealer_rationale:
+      - Привлекательная трассовая конфигурация, но двигатель, экология, коробка и quattro должны оцениваться как единое сочетание.
+      - Подходит дилеру только при прозрачной истории и полной диагностике.
+    required_checks: [код двигателя и мощность, код коробки, DPF/EGR/SCR, турбина и форсунки, тест S tronic, обслуживание quattro при наличии]
+    reject_if: [ошибки экологии или коробки, рывки и задержки, неподтверждённое обслуживание, удалённые компоненты, следы тюнинга]
+  - id: 18-tfsi-stronic
+    label: 1.8 TFSI · S tronic
+    engine_patterns: [1.8 TFSI]
+    gearbox_patterns: [S tronic, automatic, automat, DSG]
+    power_hp: [180]
+    verdict: inspect
+    confidence: low
+    dealer_rationale:
+      - Более узкая и дорогая в диагностике конфигурация, чем массовый 1.4 TFSI.
+      - Покупать без точного кода двигателя, коробки и подтверждения привода нельзя.
+    required_checks: [код двигателя и коробки, расход масла, охлаждение, холодный и горячий запуск, S tronic, quattro при наличии, следы тюнинга]
+    reject_if: [заметный расход масла, рывки коробки, нет истории, неподтверждённый тюнинг, продавец не разрешает диагностику]
+factory_lines:
+  - name: Attraction / base
+    positioning: Базовая линия; название и состав зависели от года и рынка.
+    equipment_notes: [Проверять тип кондиционирования, мультимедиа и круиз-контроль по VIN]
+  - name: Ambition / sport
+    positioning: Более спортивное позиционирование и оформление.
+    equipment_notes: [Не считать внешние элементы доказательством заводской комплектации]
+  - name: Ambiente / design
+    positioning: Акцент на комфорт и оформление.
+    equipment_notes: [Фактический состав опций сверять по заводским кодам]
+  - name: S line
+    positioning: Пакет оформления и оснащения, не равнозначный модели S3.
+    equipment_notes: [Отделять S line от S3 и RS 3]
+equipment_groups:
+  - {name: Климат, values: [без кондиционера, кондиционер, автоматический климат-контроль], note: зависит от рынка, года и пакета}
+  - {name: Свет, values: [галоген, xenon, LED], note: проверять рестайлинг и опции}
+  - {name: Ассистенты, values: [круиз-контроль, адаптивный круиз-контроль, парковочные датчики, камера], note: не определять только по заголовку объявления}
+  - {name: Мультимедиа, values: [MMI, навигация, smartphone integration], note: версии системы различаются}
+decision_notes:
+  - Сначала определить точный двигатель, коробку и привод, затем читать рекомендации.
+  - Не переносить репутацию одного кода двигателя на всю модель.
+  - Проверять заводскую конфигурацию по VIN и кодам комплектации.
+sources:
+  - id: audi-erwin
+    title: Audi erWin — заводская ремонтная и VIN-информация
+    url: https://audi.erwin-store.com/erwin/showInfoTour.do
+    source_type: manufacturer
+    trust_level: A
+    checked_at: "2026-08-21"
+    scope: VIN, коды двигателя, заводские документы, регламенты и техническая информация.
+    limitation: Часть сведений доступна только после регистрации и оплаты.
+  - id: adac-a3-petrol
+    title: ADAC Gebrauchtwageninformation — Audi A3 2012–2020 Benziner
+    url: https://assets.adac.de/image/upload/Autodatenbank/GWInfo/gw0265-audi-a3-2012-2020-benziner-bericht.pdf
+    source_type: independent_statistics
+    trust_level: B
+    checked_at: "2026-08-21"
+    scope: История модели, бензиновые версии, оснащение и обзор подержанного автомобиля.
+    limitation: Не заменяет статистику по каждому коду двигателя и коробки.
+  - id: adac-a3-diesel
+    title: ADAC Gebrauchtwageninformation — Audi A3 2012–2020 Diesel
+    url: https://assets.adac.de/Autodatenbank/GWInfo/gw0266-audi-a3-2012-2020-diesel-bericht.pdf
+    source_type: independent_statistics
+    trust_level: B
+    checked_at: "2026-08-21"
+    scope: Дизельная линейка, эксплуатационные расходы, обслуживание и обзор модели.
+    limitation: Не даёт частоту каждой неисправности отдельно по коду двигателя.
+  - id: adac-breakdown-2025
+    title: ADAC Pannenstatistik 2025
+    url: https://assets.adac.de/image/upload/v1744279730/ADAC-eV/KOR/Text/PDF/Pannenstatistik_2025_final_nrmvls.pdf
+    source_type: independent_statistics
+    trust_level: B
+    checked_at: "2026-08-21"
+    scope: Частота вызовов дорожной помощи по модели и году регистрации.
+    limitation: Учитывает только поломки, приведшие к остановке; не разделяет двигатели.
+  - id: eu-safety-gate
+    title: European Commission Safety Gate
+    url: https://ec.europa.eu/safety-gate-alerts/
+    source_type: regulator
+    trust_level: A
+    checked_at: "2026-08-21"
+    scope: Официальные европейские уведомления и отзывные кампании.
+    limitation: Отсутствие записи не доказывает отсутствие эксплуатационной проблемы.
+  - id: cepik-api
+    title: CEPiK — официальный API польского автопарка
+    url: https://dane.gov.pl/media/ckeditor/2020/05/29/standard-api.pdf
+    source_type: government_data
+    trust_level: A
+    checked_at: "2026-08-21"
+    scope: Марка, модель, год, топливо и регистрационная статистика Польши.
+    limitation: Не содержит полной истории ремонтов и фактических цен сделок.
+  - id: otomoto-insights
+    title: OTOMOTO Insights — данные спроса и предложения польского рынка
+    url: https://www.otomoto.pl/news/insights
+    source_type: marketplace_statistics
+    trust_level: B
+    checked_at: "2026-08-21"
+    scope: Общий фон спроса и предложения, регистраций, цен и структуры польского авторынка.
+    limitation: Публичные материалы не дают полной ликвидности каждого сочетания двигателя и коробки; для этого DealerMind использует собственные наблюдения объявлений.
+  - id: audi-mediacenter-a3-8v-image
+    title: Audi MediaCenter — Audi A3 Sportback 8V, галерея 2016
+    url: https://audi-mediacenter.pl/galeria%2C875%2Caudi-a3-sportback.html
+    source_type: manufacturer_media
+    trust_level: A
+    checked_at: "2026-08-21"
+    scope: Официальное студийное изображение A161803 и идентификация рестайлингового Audi A3 Sportback 8V.
+    limitation: Разрешено для частных и редакционных целей; рекламное использование без отдельного разрешения запрещено.

@@ -1,0 +1,30 @@
+slug: volkswagen-golf-vii-pl-v1
+make: Volkswagen
+model: Golf
+generation: VII
+market_code: PL
+production_years: "2012–2020"
+version: knowledge.volkswagen-golf-vii.pl.v1
+verification_status: draft
+summary: Проверенная стартовая карта Golf VII; вердикты относятся к точному мотору и коробке, а не ко всем автомобилям поколения.
+body_types: [3-door, 5-door, Variant, Sportsvan, Alltrack]
+powertrains:
+  - {name: 1.4 TSI, fuel: petrol, transmissions: [manual, DSG], verdict: recommended, evidence_refs: [adac-golf-petrol], review_note: ADAC рекомендует 1.4 TSI 130–150 л.с. как компромисс расхода и динамики; подтверждение кода и обслуживания обязательно.}
+  - {name: 1.5 TSI ACT, fuel: petrol, transmissions: [manual, DSG], verdict: recommended, evidence_refs: [adac-golf-petrol], review_note: ADAC рекомендует 1.5 TSI 130–150 л.с.; ACT и история обслуживания должны быть подтверждены.}
+  - {name: 1.6 TDI, fuel: diesel, transmissions: [manual, DSG], verdict: caution, evidence_refs: [adac-golf-diesel], review_note: Только после проверки DPF/EGR и сценария прошлой эксплуатации.}
+  - {name: 2.0 TDI, fuel: diesel, transmissions: [manual, DSG], drivetrains: [FWD, 4Motion], verdict: recommended, evidence_refs: [adac-golf-diesel], review_note: ADAC рекомендует 150-сильный 2.0 TDI как баланс тяги и расхода.}
+gearbox_profiles:
+  - {name: Механическая, variants: [5-ступенчатая, 6-ступенчатая], identification_rule: Подтвердить код коробки по VIN, suitable_for: Понятная первичная диагностика, inspection_checks: [сцепление, двухмассовый маховик, утечки], risk_signals: [пробуксовка, вибрации], evidence_refs: [adac-golf-petrol], evidence_status: reviewed}
+  - {name: DSG, variants: [6-ступенчатая, 7-ступенчатая], identification_rule: Установить точный код коробки, suitable_for: Только с документированной историей, inspection_checks: [плавность старта, D/R, ошибки блока], risk_signals: [рывки, задержка D/R, аварийный режим], evidence_refs: [adac-golf-petrol, adac-golf-diesel], evidence_status: reviewed_with_limits}
+known_issues:
+  - {component: Тормоза и пружины/амортизаторы, applicability: Golf VII в целом, classification: confirmed_model_level, severity: medium, symptoms: [биение при торможении, стук подвески], inspection: [осмотр дисков, пружин и амортизаторов на подъёмнике], evidence_refs: [adac-golf-petrol], note: ADAC отмечает эти узлы на уровне модели; это не диагноз конкретной машины.}
+  - {component: DSG, applicability: Все версии DSG до определения кода, classification: inspection_risk, severity: high, symptoms: [рывки при старте, задержка включения], inspection: [дорожный тест и электронная диагностика], evidence_refs: [adac-golf-petrol], note: Конкретную коробку требуется идентифицировать.}
+dealer_configurations:
+  - {id: 14-tsi-manual, label: 1.4 TSI · механика, engine_patterns: [1.4 TSI], gearbox_patterns: [manual, механ], power_hp: [125, 140, 150], verdict: consider, confidence: medium, dealer_rationale: [Подтверждённый ADAC компромисс тяги и расхода], required_checks: [код двигателя, расход масла, охлаждение, сцепление], reject_if: [расход масла без объяснения, отказ от диагностики]}
+  - {id: 20-tdi-manual, label: 2.0 TDI 150 · механика, engine_patterns: [2.0 TDI], gearbox_patterns: [manual, механ], power_hp: [150], verdict: consider, confidence: medium, dealer_rationale: [ADAC рекомендует эту конфигурацию], required_checks: [DPF/EGR, турбина, форсунки, маховик], reject_if: [удалённая экология, дымность, ошибки двигателя]}
+factory_lines: [{name: Trendline, positioning: Базовая линия, equipment_notes: [Проверять фактическое оснащение по VIN]}, {name: Comfortline, positioning: Средняя линия, equipment_notes: [Сверять парковочные ассистенты]}, {name: Highline, positioning: Верхняя линия, equipment_notes: [Не считать эмблемы доказательством комплектации]}]
+equipment_groups: [{name: Кузов, values: [хэтчбек, Variant, Sportsvan, Alltrack], note: не смешивать в оценке}]
+decision_notes: [Установить код двигателя и коробки до решения, Проверять открытые отзывные кампании по VIN]
+sources:
+  - {id: adac-golf-petrol, title: ADAC Gebrauchtwageninfo — VW Golf VII 2012–2020 Benziner, url: "https://assets.adac.de/image/upload/Autodatenbank/GWInfo/gw0259-vw-golf-vii-2012-2020-benziner-bericht.pdf", source_type: independent_statistics, trust_level: B, checked_at: "2026-10-04", scope: Бензиновые версии, рекомендации и модельные риски, limitation: Не заменяет проверку кода двигателя.}
+  - {id: adac-golf-diesel, title: ADAC Gebrauchtwageninfo — VW Golf VII 2012–2020 Diesel, url: "https://assets.adac.de/image/upload/Autodatenbank/GWInfo/gw0260-vw-golf-vii-2012-2020-diesel-bericht.pdf", source_type: independent_statistics, trust_level: B, checked_at: "2026-10-04", scope: Дизельные версии и рекомендации, limitation: Не содержит истории конкретного автомобиля.}

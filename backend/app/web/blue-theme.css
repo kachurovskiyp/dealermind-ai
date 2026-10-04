@@ -1,0 +1,9 @@
+/* Blue visual system: retained semantic variable names avoid changing application logic. */
+:root{--ink:#0d1b2a;--muted:#62748a;--paper:#f5f8fc;--line:#dbe5f0;--lime:#87c2ff;--green:#185fa5}
+.catalog-group header span,.fleet-status.ready,.knowledge-status.verified,.trust-A,.liquidity-row .confidence.high,.status.accepted,.status.acquired,.percentile.good{background:#e6f1ff}
+.fleet-status{background:#f0f7ff}
+.dealer-assessment.consider,.dealer-config.consider,.evidence-meter{background:#edf5ff}
+.seller-badge{background:#e6f1ff}.collection-status{border-color:#79b8ef;background:#f0f7ff}.collection-spinner{border-color:#d7eaff}.collection-spinner{border-top-color:var(--green)}
+.bar-column>span{background:linear-gradient(180deg,var(--lime),#3b82c4)}
+nav a[href="/catalog"],nav a[href="/fleet"],nav a[href="/docs"],nav a[data-open-logistics],nav a[href="#sources"]{display:none}
+nav a[aria-current="page"]{color:var(--ink);font-weight:750}

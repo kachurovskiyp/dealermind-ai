@@ -1,0 +1,20 @@
+version: poland-budget-focus-v1
+price_band: {min_pln: 10000, max_pln: 30000}
+groups:
+  - {make: Volkswagen, tier: core, models: [Golf, Passat, Polo, Tiguan]}
+  - {make: Škoda, tier: core, models: [Octavia, Fabia, Superb]}
+  - {make: Ford, tier: core, models: [Focus, Mondeo, Fiesta, C-Max]}
+  - {make: Opel, tier: core, models: [Astra, Corsa, Insignia, Mokka]}
+  - {make: Toyota, tier: core, models: [Yaris, Auris, Corolla]}
+  - {make: Kia, tier: core, models: [Ceed, Rio, Sportage]}
+  - {make: Hyundai, tier: core, models: [i30, i20, ix35]}
+  - {make: Renault, tier: core, models: [Clio, Megane, Captur]}
+  - {make: Peugeot, tier: core, models: ["208", "308", "3008"]}
+  - {make: Dacia, tier: core, models: [Duster, Sandero, Logan]}
+  - {make: Honda, tier: core, models: [Civic, Jazz]}
+  - {make: SEAT, tier: core, models: [Leon, Ibiza]}
+  - {make: Audi, tier: review, models: [A3, A4]}
+  - {make: BMW, tier: review, models: ["1 Series", "3 Series"]}
+  - {make: Mercedes-Benz, tier: review, models: ["A-Class", "C-Class"]}
+  - {make: Mazda, tier: review, models: ["3", "6"]}
+  - {make: Nissan, tier: review, models: [Qashqai]}

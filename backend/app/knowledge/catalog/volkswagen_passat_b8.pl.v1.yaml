@@ -1,0 +1,18 @@
+slug: volkswagen-passat-b8-pl-v1
+make: Volkswagen
+model: Passat
+generation: B8
+market_code: PL
+production_years: "2014–2023"
+version: knowledge.volkswagen-passat-b8.pl.v1
+verification_status: draft
+summary: Проверенная стартовая карта Passat B8; большинство экземпляров имеют высокий пробег, поэтому история и диагностика важнее общей репутации модели.
+body_types: [Sedan, Variant, Alltrack]
+powertrains: [{name: 1.6 TDI, fuel: diesel, transmissions: [manual, DSG], verdict: caution, evidence_refs: [adac-passat-diesel], review_note: Базовая версия достаточна, но не оптимальна для тяжёлого Passat.}, {name: 2.0 TDI, fuel: diesel, transmissions: [manual, DSG], drivetrains: [FWD, 4Motion], verdict: recommended, evidence_refs: [adac-passat-diesel], review_note: ADAC рекомендует 150/190/200 л.с. как золотую середину по тяге и расходу.}]
+gearbox_profiles: [{name: DSG, variants: [6-ступенчатая, 7-ступенчатая], identification_rule: Установить точный код коробки, suitable_for: Только с сервисной историей, inspection_checks: [плавность старта, D/R, ошибки блока], risk_signals: [неравномерное трогание, задержки, аварийный режим], evidence_refs: [adac-passat-diesel], evidence_status: reviewed_with_limits}]
+known_issues: [{component: Ходовая и тормоза, applicability: Passat B8 в целом, classification: confirmed_model_level, severity: medium, symptoms: [стуки, биение, неравномерный износ], inspection: [осмотр подвески и тормозов на подъёмнике], evidence_refs: [adac-passat-diesel], note: ADAC связывает часть проблем с часто высокими пробегами.}]
+dealer_configurations: [{id: 20-tdi, label: 2.0 TDI 150/190 · механика или DSG, engine_patterns: [2.0 TDI], gearbox_patterns: [], power_hp: [150, 190, 200], verdict: consider, confidence: medium, dealer_rationale: [ADAC рекомендует эту группу мощностей], required_checks: [DPF/SCR, турбина, коробка, ходовая, пробег], reject_if: [удалённая экология, ошибки коробки, отсутствие истории]}]
+factory_lines: [{name: Trendline, positioning: Базовая, equipment_notes: [Сверять опции по VIN]}, {name: Comfortline, positioning: Средняя, equipment_notes: [Предпочтительна по рекомендации ADAC]}, {name: Highline, positioning: Верхняя, equipment_notes: [Проверять фактическое оснащение]}]
+equipment_groups: [{name: Кузов, values: [Sedan, Variant, Alltrack], note: Variant преобладает на вторичном рынке}]
+decision_notes: [Проверять реальный пробег и историю обслуживания, Не принимать DSG без диагностики]
+sources: [{id: adac-passat-diesel, title: ADAC Gebrauchtwageninfo — VW Passat 2014–2023 Diesel, url: "https://assets.adac.de/Autodatenbank/GWInfo/gw0351-vw-passat-2014-2023-diesel-bericht.pdf", source_type: independent_statistics, trust_level: B, checked_at: "2026-10-04", scope: Дизельные версии, модельные риски и рекомендации, limitation: Не заменяет диагностику конкретного автомобиля.}]

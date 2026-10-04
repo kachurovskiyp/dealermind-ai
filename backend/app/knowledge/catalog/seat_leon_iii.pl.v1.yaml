@@ -1,0 +1,96 @@
+slug: seat-leon-iii-pl-v1
+make: SEAT
+model: Leon
+generation: III
+market_code: PL
+production_years: "2012–2020"
+version: knowledge.seat-leon-iii.pl.v1
+verification_status: draft
+summary: Стартовая проверенная карта Leon III для закупки в Польше. Профиль опирается на независимый отчёт ADAC по бензиновым версиям; дизельные и спортивные модификации требуют отдельной редакционной проверки.
+body_types: [SC, "5-door", ST, X-PERIENCE]
+powertrains:
+  - name: 1.4 TSI
+    fuel: petrol
+    transmissions: [manual, DSG]
+    verdict: recommended
+    evidence_refs: [adac-leon-petrol]
+    review_note: ADAC выделяет 1.4 TSI мощностью 122–150 л.с. как наиболее удачный баланс динамики и расхода; точный индекс двигателя и историю обслуживания всё равно сверять.
+  - name: 1.8 TSI
+    fuel: petrol
+    transmissions: [manual, DSG]
+    verdict: caution
+    evidence_refs: [adac-leon-petrol]
+    review_note: Версия заметно динамичнее, но ADAC отмечает более высокую цену покупки и меньшую распространённость; покупать только после проверки конкретного экземпляра.
+  - name: Cupra 2.0 TSI
+    fuel: petrol
+    transmissions: [manual, DSG]
+    performance: true
+    verdict: unreviewed
+    evidence_refs: [adac-leon-petrol]
+    review_note: Спортивная версия требует отдельной оценки истории, доработок и ликвидности; этот профиль не даёт автоматической рекомендации.
+gearbox_profiles:
+  - name: DSG
+    variants: ["6-ступенчатая", "7-ступенчатая"]
+    identification_rule: Уточнить код коробки и интервал её обслуживания по VIN и документам.
+    suitable_for: Только после дорожной проверки и подтверждённой сервисной истории.
+    inspection_checks: [плавность трогания, переключения на холодную и после прогрева, режимы D/R, ошибки блока]
+    risk_signals: [рывки при старте, задержка включения передачи, аварийный режим]
+    evidence_refs: [adac-leon-petrol]
+    evidence_status: reviewed_with_limits
+known_issues:
+  - component: Подвеска
+    applicability: Leon III в целом
+    classification: confirmed_model_level
+    severity: medium
+    symptoms: [стуки, ухудшение устойчивости, неравномерный износ шин]
+    inspection: [осмотр пружин и амортизаторов на подъёмнике, короткий тест-драйв]
+    evidence_refs: [adac-leon-petrol]
+    note: В отчёте ADAC элементы подвески отмечены среди зон, которые могут влиять на результат технического осмотра.
+dealer_configurations:
+  - id: 14-tsi-manual
+    label: 1.4 TSI 122–150 · механика
+    engine_patterns: [1.4 TSI]
+    gearbox_patterns: [manual, механика]
+    power_hp: [122, 125, 140, 150]
+    verdict: consider
+    confidence: medium
+    dealer_rationale: [ADAC рекомендует 1.4 TSI как сбалансированный бензиновый вариант]
+    required_checks: [точный индекс двигателя, история обслуживания, подвеска, диагностика ошибок]
+    reject_if: [нет подтверждаемой истории, критические ошибки двигателя, следы некачественных доработок]
+  - id: 14-tsi-dsg
+    label: 1.4 TSI 122–150 · DSG
+    engine_patterns: [1.4 TSI]
+    gearbox_patterns: [DSG]
+    power_hp: [122, 125, 140, 150]
+    verdict: inspect
+    confidence: medium
+    dealer_rationale: [Сильная конфигурация, но решение зависит от состояния конкретной коробки]
+    required_checks: [полный тест DSG, история обслуживания, диагностика ошибок]
+    reject_if: [рывки или задержки DSG, аварийный режим, нет истории]
+factory_lines:
+  - name: Reference
+    positioning: Базовая
+    equipment_notes: [Фактическое оснащение сверять по VIN]
+  - name: Style
+    positioning: Комфортная
+    equipment_notes: [Проверять климатическую систему и ассистенты по комплектации]
+  - name: FR
+    positioning: Спортивная
+    equipment_notes: [Проверять оригинальность элементов и следы активной эксплуатации]
+equipment_groups:
+  - name: Кузов
+    values: [SC, "5-door", ST, X-PERIENCE]
+    note: Тип кузова влияет на аудиторию и срок продажи.
+  - name: Комплектация
+    values: [Reference, Style, FR]
+    note: Название линии не заменяет проверку реальных опций.
+decision_notes: [Не путать общее хорошее мнение о 1.4 TSI с гарантией состояния конкретного автомобиля, DSG принимать только после теста и диагностики, Подвеску проверять до расчёта закупочной цены]
+sources:
+  - id: adac-leon-petrol
+    title: ADAC Gebrauchtwageninfo — SEAT Leon 2012–2020 Benziner
+    url: "https://assets.adac.de/Autodatenbank/GWInfo/gw0268-seat-leon-2012---2020-benziner-bericht.pdf"
+    source_type: independent_statistics
+    trust_level: B
+    checked_at: "2026-10-04"
+    scope: Бензиновые Leon III, рекомендации по моторам, результаты ADAC и TÜV.
+    limitation: Не покрывает дизельные версии и не заменяет диагностику конкретного автомобиля.
